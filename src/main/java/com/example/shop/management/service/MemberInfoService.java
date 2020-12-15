@@ -1,6 +1,6 @@
 package com.example.shop.management.service;
 
-import com.example.shop.management.bean.LeUser;
+import com.example.shop.management.bean.MemberInfo;
 import com.baomidou.mybatisplus.service.IService;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.service.IService;
  * </p>
  *
  * @author 陈志浩123
- * @since 2020-11-03
+ * @since 2020-12-15
  */
-public interface LeUserService extends IService<LeUser> {
+public interface MemberInfoService extends IService<MemberInfo> {
 
 }

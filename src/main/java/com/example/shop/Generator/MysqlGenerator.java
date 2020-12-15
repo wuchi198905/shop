@@ -43,7 +43,7 @@ public class MysqlGenerator {
 
     private static String packageName="";    //文件路径
     private static String authorName="陈志浩";     //作者
-    private static String table= "le_user";                  //table名字
+    private static String table= "member_info";                  //table名字
     private static String prefix="";                     //table前缀
     private static File file = new File(packageName);
     private static String path = file.getAbsolutePath();
@@ -90,7 +90,7 @@ public class MysqlGenerator {
                             .setDriverName("com.mysql.cj.jdbc.Driver")
                             .setUsername("root")
                             .setPassword("root")
-                            .setUrl("jdbc:mysql://192.168.124.12:3306/shop?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false")
+                            .setUrl("jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false")
             ).setStrategy(
                     // 策略配置
                     new StrategyConfig()

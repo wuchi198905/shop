@@ -1,47 +1,38 @@
 package com.example.shop.management.controller;
 
 
-import com.example.shop.management.bean.LeUser;
-import com.example.shop.management.service.LeUserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Random;
 
 /**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author 陈志浩123
- * @since 2020-11-03
+ * www.1b23.com
  */
-@RestController
-@RequestMapping("/leUser")
+@Api(description = "用户操作接口")
+@Controller("user")
+@RequestMapping("/user")
 public class LeUserController {
-    @Autowired
-   private LeUserService leUserService;
-    /**
-     * 登录
-     * @author yanziyang
-     * @date 2018年5月23日09:43:10
-     * @param
-     * @return
-     */
+    //...
+    @ApiOperation(value = "获取otp", notes="通过手机号获取OTP验证码")
+    @ApiImplicitParam(name = "telephone", value = "电话号码", paramType = "query", required = true, dataType = "Integer")
+    @RequestMapping(value = "getotp", method= RequestMethod.POST)
     @ResponseBody
-    @RequestMapping("/login")
-    public String login(LeUser member){
-        try {
-            //leUserService.login(member);
-        }catch (Exception e){
+    public String getOtp(@RequestParam(name = "telephone") String telphone) {
+        //需要按照一定的规则生成OTP验证码
+        Random random = new Random();
+        int randomInt = random.nextInt(99999);
+        randomInt += 10000;
+        String otpCode = String.valueOf(randomInt);
 
 
-        }
-        return (String)null;
+        return telphone;
     }
-}
 
+}
