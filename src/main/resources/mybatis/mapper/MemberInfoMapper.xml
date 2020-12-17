@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.shop.management.mapper.MemberInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.shop.management.bean.MemberInfo">
+        <id column="member_id" property="memberId" />
+        <result column="member_name" property="memberName" />
+        <result column="member_gender" property="memberGender" />
+        <result column="member_age" property="memberAge" />
+        <result column="member_education" property="memberEducation" />
+        <result column="member_weight" property="memberWeight" />
+        <result column="member_height" property="memberHeight" />
+        <result column="marital_status" property="maritalStatus" />
+        <result column="WeChat_authentication_status" property="wechatAuthenticationStatus" />
+        <result column="real_name_authentication_status" property="realNameAuthenticationStatus" />
+        <result column="membership_level" property="membershipLevel" />
+        <result column="openid" property="openid" />
+        <result column="contact_number" property="contactNumber" />
+        <result column="mailbox" property="mailbox" />
+        <result column="province" property="province" />
+        <result column="city" property="city" />
+        <result column="area" property="area" />
+        <result column="address" property="address" />
+        <result column="password" property="password" />
+        <result column="id_number" property="idNumber" />
+        <result column="account" property="account" />
+        <result column="we_chat_number" property="weChatNumber" />
+        <result column="birthday" property="birthday" />
+        <result column="current_city" property="currentCity" />
+        <result column="current_economy" property="currentEconomy" />
+        <result column="current_dimension" property="currentDimension" />
+        <result column="online" property="online" />
+        <result column="whether_upload_pictures" property="whetherUploadPictures" />
+        <result column="member_source" property="memberSource" />
+        <result column="constellation" property="constellation" />
+        <result column="account_status" property="accountStatus" />
+        <result column="last_login_time" property="lastLoginTime" />
+        <result column="registration_time" property="registrationTime" />
+        <result column="sts" property="sts" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        member_id AS memberId, member_name AS memberName, member_gender AS memberGender, member_age AS memberAge, member_education AS memberEducation, member_weight AS memberWeight, member_height AS memberHeight, marital_status AS maritalStatus, WeChat_authentication_status AS wechatAuthenticationStatus, real_name_authentication_status AS realNameAuthenticationStatus, membership_level AS membershipLevel, openid, contact_number AS contactNumber, mailbox, province, city, area, address, password, id_number AS idNumber, account, we_chat_number AS weChatNumber, birthday, current_city AS currentCity, current_economy AS currentEconomy, current_dimension AS currentDimension, online, whether_upload_pictures AS whetherUploadPictures, member_source AS memberSource, constellation, account_status AS accountStatus, last_login_time AS lastLoginTime, registration_time AS registrationTime, sts
+    </sql>
+
+</mapper>

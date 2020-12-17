@@ -1,24 +1,199 @@
 package com.example.shop.management.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import org.springframework.web.bind.annotation.RestController;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.example.shop.base.SessionVehicle;
+import com.example.shop.base.json.RC;
+import com.example.shop.base.json.Result;
+import com.example.shop.management.bean.LoginUser;
+import com.example.shop.management.bean.MemberInfo;
+import com.example.shop.management.service.MemberInfoService;
+import com.example.shop.pub.Utils.VerifyImageUtil;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.*;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import org.springframework.ui.Model;
 
 /**
  * <p>
- *  前端控制器
+ * 会员表 前端控制器
  * </p>
  *
  * @author 陈志浩123
- * @since 2020-12-15
+ * @since 2020-12-16
  */
+@Slf4j
+@Api(description = "会员前台控制")
 @RestController
 @RequestMapping("/memberInfo")
 public class MemberInfoController {
+    @Autowired
+    private  MemberInfoService memberInfoService;
     /**
-     *
+     * 注册会员
      */
+    @ApiOperation(value = "注册", notes = "通过手机号注册账号")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "password", value = "密码", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "code", value = "验证码", paramType = "query", required = true, dataType = "String" )})
 
+
+    @RequestMapping(value = "registered", method = RequestMethod.POST)
+    @ResponseBody
+    public String registered(@RequestParam(name = "account") String account,@RequestParam(name = "password") String password,@RequestParam(name = "code") String code) {
+
+
+
+        return memberInfoService.registered(account,password,code);
+    }
+    /**
+     * 注册会员
+     */
+    @ApiOperation(value = "获取手机验证码", notes = "通过手机号获取验证码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "code", value = "图形验证码", paramType = "query", required = true, dataType = "String" )})
+
+
+    @RequestMapping(value = "getVerificationCode", method = RequestMethod.POST)
+    @ResponseBody
+    public String getVerificationCode(@RequestParam(name = "account") String account,@RequestParam(name = "code") String code) {
+        int mun=memberInfoService.selectCount(new EntityWrapper<MemberInfo>().eq("account",account));
+        if(mun>0){
+            return Result.Result(RC.REGIST_PARAM_MOBILE_OCCUPIED);
+        }
+        boolean fig=memberInfoService.getVerificationCode(account);
+
+        if(fig){
+            return Result.Result("00000","获取验证码成功");
+        }
+        return Result.Result(RC.REGIST_PARAM_TYPE_INVALID);
+    }
+    // 保存横轴位置用于对比，并设置最大数量为10000，多了就先进先出，并设置超时时间为70秒
+    public static Cache< String, Integer > cacheg = CacheBuilder.newBuilder().expireAfterWrite(70, TimeUnit.SECONDS)
+            .maximumSize(10000).build();
+
+    @GetMapping
+    @ApiOperation(value = "获取图形验证码", notes = "获取图形验证码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "String" ),
+           })
+    @RequestMapping(value = "index",method = RequestMethod.GET)
+    public String test(HttpServletRequest request, Model model) throws IOException {
+        return "index.html";
+    }
+    @ApiOperation(value = "获取图形验证码", notes = "获取图形验证码")
+    @GetMapping
+    @ApiImplicitParams({
+            //@ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "String" ),
+    })
+    @RequestMapping(value = "getPic",method = RequestMethod.POST)
+    public @ResponseBody Map < String, Object > getPic(HttpServletRequest request) throws IOException {
+        // 读取图库目录
+        File imgCatalog = new File(ResourceUtils.getURL("classpath:").getPath() + "sliderimage\\targets\\");
+        File[] files = imgCatalog.listFiles();
+        // 随机选择需要切的图
+        int randNum = new Random().nextInt(files.length);
+        File targetFile = files[randNum];
+        // 随机选择剪切模版
+        Random r = new Random();
+        int num = r.nextInt(6) + 1;
+        File tempImgFile = new File(ResourceUtils.getURL("classpath:").getPath() + "sliderimage\\templates\\" + num
+                + "-w.png");
+        // 根据模板裁剪图片
+        try {
+            Map < String, Object > resultMap = VerifyImageUtil.pictureTemplatesCut(tempImgFile, targetFile);
+            // 生成流水号，这里就使用时间戳代替
+            String lno = Calendar.getInstance().getTimeInMillis() + "";
+            cacheg.put(lno, Integer.valueOf(resultMap.get("xWidth") + ""));
+            resultMap.put("capcode", lno);
+            // 移除横坐标送前端
+            resultMap.remove("xWidth");
+            return resultMap;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    @ApiOperation(value = "获取图形验证码", notes = "获取图形验证码")
+    @GetMapping
+    @ApiImplicitParams({
+           // @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "String" ),
+    })
+    @RequestMapping(value = "checkcapcode" ,method = RequestMethod.POST)
+    public @ResponseBody Map < String, Object > checkcapcode(@RequestParam("xpos") int xpos,
+                                                             @RequestParam("capcode") String capcode, HttpServletRequest request) throws IOException {
+        Map < String, Object > result = new HashMap< String, Object >();
+        Integer x = cacheg.getIfPresent(capcode);
+        if (x == null) {
+            // 超期
+            result.put("code", 99998);
+        }
+        else if (xpos - x > 5 || xpos - x < -5) {
+            // 验证失败
+            result.put("code", 99999);
+        }
+        else {
+            // 验证成功
+            result.put("code", 00000);
+        }
+
+        return result;
+    }
+    /**
+     * 完善信息
+     */
+    @ApiOperation(value = "完善信息", notes = "通过手机号注册账号")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "String", name = "Token", value = "token标记", required = true),
+            @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "password", value = "密码", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "code", value = "验证码", paramType = "query", required = true, dataType = "String" )})
+
+    @RequestMapping(value =  "/perfectInformation",method = RequestMethod.POST )
+    public   String perfectInformation(MemberInfo memberInfo){
+        String VHEICLEiD = SessionVehicle.get(SessionVehicle.MEMBER_ID);
+
+        return VHEICLEiD;
+    }
+    @ApiOperation(value = "登录", notes = "通过手机号注册账号")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "password", value = "密码", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "code", value = "验证码", paramType = "query", required = true, dataType = "String" )})
+
+    @RequestMapping(value =  "/login",method = RequestMethod.POST )
+    public String login(MemberInfo user) {
+        log.warn("执行登录操作!");
+        //先执行登录验证的过滤操作,才会执行后面这些乱七八糟的异常
+        //throw new MyException("测试自定义异常!");
+        LoginUser loginUser = memberInfoService.login(user);
+
+        if (loginUser != null) {
+            return Result.Result("00000","登录成功",loginUser.getToken());
+        }
+        return Result.Result("100002","获取验证码成功");
+    }
 }
 

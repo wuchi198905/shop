@@ -43,7 +43,7 @@ public class MysqlGenerator {
 
     private static String packageName="";    //文件路径
     private static String authorName="陈志浩";     //作者
-    private static String table= "member_info";                  //table名字
+    private static String table= "vip_level";                  //table名字
     private static String prefix="";                     //table前缀
     private static File file = new File(packageName);
     private static String path = file.getAbsolutePath();

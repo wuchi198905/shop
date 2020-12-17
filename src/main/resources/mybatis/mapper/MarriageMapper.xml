@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.shop.management.mapper.MarriageMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.shop.management.bean.Marriage">
+        <id column="marriage_id" property="marriageId" />
+        <result column="member_id" property="memberId" />
+        <result column="title" property="title" />
+        <result column="ages" property="ages" />
+        <result column="area" property="area" />
+        <result column="heights" property="heights" />
+        <result column="weight" property="weight" />
+        <result column="status" property="status" />
+        <result column="remarks" property="remarks" />
+        <result column="creation_time" property="creationTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        marriage_id AS marriageId, member_id AS memberId, title, ages, area, heights, weight, status, remarks, creation_time AS creationTime, update_time AS updateTime
+    </sql>
+
+</mapper>

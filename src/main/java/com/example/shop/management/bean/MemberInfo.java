@@ -3,6 +3,7 @@ package com.example.shop.management.bean;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.enums.IdType;
+import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
@@ -11,11 +12,11 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ * 会员表
  * </p>
  *
  * @author 陈志浩123
- * @since 2020-12-15
+ * @since 2020-12-16
  */
 @TableName("member_info")
 public class MemberInfo extends Model<MemberInfo> {
@@ -163,6 +164,20 @@ public class MemberInfo extends Model<MemberInfo> {
      */
     @TableField("account_status")
     private String accountStatus;
+    /**
+     * 上次登录时间
+     */
+    @TableField("last_login_time")
+    private Date lastLoginTime;
+    /**
+     * 注册时间
+     */
+    @TableField("registration_time")
+    private Date registrationTime;
+    /**
+     * 0正常1删除
+     */
+    private Integer sts;
 
 
     public Integer getMemberId() {
@@ -413,6 +428,30 @@ public class MemberInfo extends Model<MemberInfo> {
         this.accountStatus = accountStatus;
     }
 
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
+
+    public Date getRegistrationTime() {
+        return registrationTime;
+    }
+
+    public void setRegistrationTime(Date registrationTime) {
+        this.registrationTime = registrationTime;
+    }
+
+    public Integer getSts() {
+        return sts;
+    }
+
+    public void setSts(Integer sts) {
+        this.sts = sts;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.memberId;
@@ -452,6 +491,9 @@ public class MemberInfo extends Model<MemberInfo> {
         ", memberSource=" + memberSource +
         ", constellation=" + constellation +
         ", accountStatus=" + accountStatus +
+        ", lastLoginTime=" + lastLoginTime +
+        ", registrationTime=" + registrationTime +
+        ", sts=" + sts +
         "}";
     }
 }

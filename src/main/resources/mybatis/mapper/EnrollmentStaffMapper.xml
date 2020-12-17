@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.shop.management.mapper.EnrollmentStaffMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.shop.management.bean.EnrollmentStaff">
+        <id column="personnel_id" property="personnelId" />
+        <result column="activity_id" property="activityId" />
+        <result column="status" property="status" />
+        <result column="member_id" property="memberId" />
+        <result column="creation_time" property="creationTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="sts" property="sts" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        personnel_id AS personnelId, activity_id AS activityId, status, member_id AS memberId, creation_time AS creationTime, update_time AS updateTime, sts
+    </sql>
+
+</mapper>
