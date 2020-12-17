@@ -1,9 +1,5 @@
 package com.example.shop.management.service.impl;
 
-import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.example.shop.SmsUtil;
 import com.example.shop.base.json.ApiUtil;
 import com.example.shop.base.json.RC;
 import com.example.shop.base.json.Result;
@@ -15,7 +11,6 @@ import com.example.shop.management.service.MemberInfoService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.example.shop.pub.Utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.binary.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -95,6 +90,8 @@ public class MemberInfoServiceImpl extends ServiceImpl<MemberInfoMapper, MemberI
         MemberInfo user1 = null;
         try {
             user1 = memberInfoMapper.selectByMap(map).get(0);
+            user1.setLastLoginTime(new Date());
+            memberInfoMapper.updateById(user1);
         } catch (Exception e) {
            // throw new MyException("该用户名或者密码错误,请检查后再登录!");
         }

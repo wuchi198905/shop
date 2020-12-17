@@ -17,7 +17,7 @@ public class Result  {
           map.put("msg",msg);
           return JSON.toJSON(map).toString();
       }
-    public  static  String Result(String code,String msg,String data){
+    public  static  String Result(String code,String msg,Object data){
         Map<String,Object>map=new HashMap<>();
         map.put("code",code);
         map.put("msg",msg);

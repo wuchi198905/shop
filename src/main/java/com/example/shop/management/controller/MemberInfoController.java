@@ -2,6 +2,7 @@ package com.example.shop.management.controller;
 
 
 
+
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.example.shop.base.SessionVehicle;
 import com.example.shop.base.json.RC;
@@ -12,14 +13,14 @@ import com.example.shop.management.service.MemberInfoService;
 import com.example.shop.pub.Utils.VerifyImageUtil;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ResourceUtils;
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
@@ -164,36 +165,66 @@ public class MemberInfoController {
     /**
      * 完善信息
      */
-    @ApiOperation(value = "完善信息", notes = "通过手机号注册账号")
+    @ApiOperation(value = "完善信息", notes = "完善会员的基本信息")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", dataType = "String", name = "Token", value = "token标记", required = true),
-            @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "password", value = "密码", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "code", value = "验证码", paramType = "query", required = true, dataType = "String" )})
+            @ApiImplicitParam(name = "memberName", value = "姓名", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "memberGender", value = "性别  ：男：A  女：B", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "memberAge", value = "年龄", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "memberEducation", value = "学历", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "memberWeight", value = "体重", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "maritalStatus", value = "0  未婚 1已婚 2离异 3丧偶 ", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "contactNumber", value = "联系电话", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "mailbox", value = "邮箱", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "province", value = "省", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "city", value = "市", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "area", value = "区", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "address", value = "详细地址", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "idNumber", value = "身份证编号", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "weChatNumber", value = "微信号", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "birthday", value = "生日", paramType = "query", required = true, dataType = "Date" ),
+            @ApiImplicitParam(name = "constellation", value = "星座", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "memberHeight", value = "身高", paramType = "query", required = true, dataType = "String" )
+         })
 
     @RequestMapping(value =  "/perfectInformation",method = RequestMethod.POST )
     public   String perfectInformation(MemberInfo memberInfo){
+        if(StringUtils.isNotBlank(memberInfo.getAddress())){
+            return Result.Result(RC.PERFCT_ADDRESS_ISNOTNULL);
+        }
+        if(StringUtils.isNotBlank(memberInfo.getMemberName())){
+            //return Result.Result(RC.PERFCT_ADDRESS_ISNOTNULL);
+        }
         String VHEICLEiD = SessionVehicle.get(SessionVehicle.MEMBER_ID);
-
-        return VHEICLEiD;
+        memberInfo.setMemberId(Integer.valueOf(VHEICLEiD));
+        memberInfoService.updateById(memberInfo);
+        memberInfo=memberInfoService.selectById(memberInfo);
+        memberInfo.setPassword(null);
+        return Result.Result("00000","操作成功",memberInfo);
     }
     @ApiOperation(value = "登录", notes = "通过手机号注册账号")
+
     @ApiImplicitParams({
+
             @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "password", value = "密码", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "code", value = "验证码", paramType = "query", required = true, dataType = "String" )})
+            @ApiImplicitParam(name = "password", value = "密码", paramType = "query", required = true, dataType = "String" )
+    })
 
     @RequestMapping(value =  "/login",method = RequestMethod.POST )
-    public String login(MemberInfo user) {
+    public String login(@RequestParam(name = "account") String account,@RequestParam(name = "password") String password) {
         log.warn("执行登录操作!");
         //先执行登录验证的过滤操作,才会执行后面这些乱七八糟的异常
         //throw new MyException("测试自定义异常!");
-        LoginUser loginUser = memberInfoService.login(user);
+        MemberInfo memberInfo=new MemberInfo();
+        memberInfo.setPassword(password);
+        memberInfo.setAccount(account);
+        LoginUser loginUser = memberInfoService.login(memberInfo);
+
 
         if (loginUser != null) {
             return Result.Result("00000","登录成功",loginUser.getToken());
         }
-        return Result.Result("100002","获取验证码成功");
+        return Result.Result("100002","登录失败");
     }
 }
 

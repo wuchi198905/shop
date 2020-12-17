@@ -8,6 +8,9 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
 /**
@@ -18,6 +21,7 @@ import java.io.Serializable;
  * @author 陈志浩123
  * @since 2020-12-16
  */
+
 @TableName("member_info")
 public class MemberInfo extends Model<MemberInfo> {
 
@@ -31,16 +35,19 @@ public class MemberInfo extends Model<MemberInfo> {
     /**
      * 姓名
      */
+
     @TableField("member_name")
     private String memberName;
     /**
      * 性别  ：男：A  女：B
      */
+
     @TableField("member_gender")
     private String memberGender;
     /**
      * 年龄
      */
+
     @TableField("member_age")
     private Integer memberAge;
     /**
