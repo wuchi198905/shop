@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.shop.system.mapper.RoleFuncMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.shop.system.bean.RoleFunc">
+        <id column="role_func_id" property="roleFuncId" />
+        <result column="role_id" property="roleId" />
+        <result column="right_code" property="rightCode" />
+        <result column="sts" property="sts" />
+        <result column="sts_time" property="stsTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        role_func_id AS roleFuncId, role_id AS roleId, right_code AS rightCode, sts, sts_time AS stsTime
+    </sql>
+
+</mapper>

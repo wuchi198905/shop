@@ -1,10 +1,13 @@
 package com.example.shop.base.shiro;
 
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.example.shop.base.jwt.JwtToken;
 import com.example.shop.base.util.JwtUtil;
 import com.example.shop.management.bean.MemberInfo;
-import com.example.shop.management.service.MemberInfoService;
+import com.example.shop.pub.service.MemberInfoService;
+import com.example.shop.system.bean.UserInfo;
+import com.example.shop.system.mapper.UserInfoMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -30,6 +33,8 @@ public class MyRealm extends AuthorizingRealm {
 
     @Autowired
     private MemberInfoService memberInfoService;
+    @Autowired
+    private UserInfoMapper userInfoMapper;
 
     /**
      * 必须重写此方法，不然Shiro会报错
@@ -50,6 +55,9 @@ public class MyRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String username = JwtUtil.getUsername(principals.toString());
         MemberInfo user = memberInfoService.findByUserName(username);
+        if(user==null){
+            UserInfo users=(UserInfo)userInfoMapper.selectObjs(new EntityWrapper<UserInfo>().eq("username",username).eq("sts","A")).get(0);
+        }
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         return simpleAuthorizationInfo;
     }
@@ -76,11 +84,20 @@ public class MyRealm extends AuthorizingRealm {
             throw new AuthenticationException("token无效");
         }
         MemberInfo userBean = memberInfoService.findByUserName(username);
-        if (userBean == null) {
+        UserInfo users=null;
+        String password=null;
+        if(userBean==null){
+             users=userInfoMapper.selectList(new EntityWrapper<UserInfo>().eq("username",username).eq("sts","A")).get(0);
+              password=users.getPassword();
+        }else{
+            password=userBean.getPassword();
+        }
+
+        if (userBean == null&&users==null) {
             log.error("用户不存在!)");
             throw new AuthenticationException("用户不存在!");
         }
-        if (!JwtUtil.verify(token, username, userBean.getPassword())) {
+        if (!JwtUtil.verify(token, username, password)) {
             log.error("用户名或密码错误(token无效或者与登录者不匹配)!)");
             throw new AuthenticationException("用户名或密码错误(token无效或者与登录者不匹配)!");
         }

@@ -31,4 +31,11 @@ public class Result  {
         map.put("msg",rc.msg);
         return JSON.toJSON(map).toString();
     }
+    public static String Result(RC rc,Object data) {
+        Map<String,Object>map=new HashMap<>();
+        map.put("code",rc.code);
+        map.put("msg",rc.msg);
+        map.put("data",data);
+        return JSON.toJSON(map).toString();
+    }
 }

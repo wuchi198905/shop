@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.shop.management.mapper.ImageMapper">
+<mapper namespace="com.example.shop.pub.mapper.ImageMapper">
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.shop.management.bean.Image">
@@ -19,5 +19,20 @@
     <sql id="Base_Column_List">
         image_id AS imageId, path, type, status, member_id AS memberId, user_id AS userId, creation_time AS creationTime, update_time AS updateTime, sts
     </sql>
+    <select id="imagePagination" resultType="com.example.shop.management.bean.DTO.ImageDTO">
+        select a.image_id , a.path, a.type, a.status, a.member_id , user_id, a.creation_time, a.update_time,b.account,b.member_name  FROM image a LEFT JOIN  member_info b on a.member_id=b.member_id
+        <where>
+            1=1
+            <if test="status!=null and status!='' ">
+                AND a.status=#{status}
+            </if>
+            <if test="account!=null and account!='' ">
+                AND b.account=#{account}
+            </if>
+            <if test="memberName!=null and memberName!='' ">
+                AND b.member_name=#{memberName}
+            </if>
+        </where>
+    </select>
 
 </mapper>

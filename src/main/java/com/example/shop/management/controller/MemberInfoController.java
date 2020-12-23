@@ -7,29 +7,25 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.example.shop.base.SessionVehicle;
 import com.example.shop.base.json.RC;
 import com.example.shop.base.json.Result;
+import com.example.shop.management.bean.DTO.MemberInfoDTO;
 import com.example.shop.management.bean.LoginUser;
 import com.example.shop.management.bean.MemberInfo;
-import com.example.shop.management.service.MemberInfoService;
+import com.example.shop.pub.service.MemberInfoService;
+import com.example.shop.pub.Utils.IDUtils;
 import com.example.shop.pub.Utils.VerifyImageUtil;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ResourceUtils;
 
 import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import org.springframework.ui.Model;
@@ -188,12 +184,37 @@ public class MemberInfoController {
          })
 
     @RequestMapping(value =  "/perfectInformation",method = RequestMethod.POST )
+    @ResponseBody
     public   String perfectInformation(MemberInfo memberInfo){
-        if(StringUtils.isNotBlank(memberInfo.getAddress())){
+        if(StringUtils.isBlank(memberInfo.getAddress())){
             return Result.Result(RC.PERFCT_ADDRESS_ISNOTNULL);
         }
-        if(StringUtils.isNotBlank(memberInfo.getMemberName())){
-            //return Result.Result(RC.PERFCT_ADDRESS_ISNOTNULL);
+        if(StringUtils.isBlank(memberInfo.getMemberName())){
+            return Result.Result(RC.PERFCT_MEMBERNAME_ISNOTNULL);
+        }
+        if(StringUtils.isBlank(memberInfo.getMemberGender())){
+            return Result.Result(RC.PERFCT_MEMBERGRNDER_ISNOTNULL);
+        }
+        if(StringUtils.isBlank(memberInfo.getMemberAge().toString())){
+            return Result.Result(RC.PERFCT_MEBERAGE_ISNOTNULL);
+        }
+        if(StringUtils.isBlank(memberInfo.getMemberEducation())){
+            return Result.Result(RC.PERFCT_MEMBEREUCATTION_ISNOTNULL);
+        }
+        if(StringUtils.isBlank(memberInfo.getMemberEducation())){
+            return Result.Result(RC.PERFCT_MEMBEREUCATTION_ISNOTNULL);
+        }
+        if(StringUtils.isBlank(memberInfo.getProvince())){
+            return Result.Result(RC.PERFCT_PROVINCE_ISNOTNULL);
+        }
+        if(StringUtils.isBlank(memberInfo.getMaritalStatus())){
+            return Result.Result(RC.PERFCT_MARITALsTATUS_ISNOTNULL);
+        }
+        if(StringUtils.isBlank(memberInfo.getCity())){
+            return Result.Result(RC.PERFCT_CITY_ISNOTNULL);
+        }
+        if(!IDUtils.isIDNumber(memberInfo.getIdNumber())){
+            return Result.Result(RC.PERFCT_IDNUMBER_ISNOTNULL);
         }
         String VHEICLEiD = SessionVehicle.get(SessionVehicle.MEMBER_ID);
         memberInfo.setMemberId(Integer.valueOf(VHEICLEiD));
@@ -211,6 +232,7 @@ public class MemberInfoController {
     })
 
     @RequestMapping(value =  "/login",method = RequestMethod.POST )
+    @ResponseBody
     public String login(@RequestParam(name = "account") String account,@RequestParam(name = "password") String password) {
         log.warn("执行登录操作!");
         //先执行登录验证的过滤操作,才会执行后面这些乱七八糟的异常
@@ -226,5 +248,73 @@ public class MemberInfoController {
         }
         return Result.Result("100002","登录失败");
     }
+
+    /***
+     * 上传会员登录时的最新位置
+     * @param currentEconomy 经度
+     * @param currentDimension 纬度
+     * @return
+     */
+
+    @ApiOperation(value = "上传会员登录时的最新位置", notes = "上传会员登录时的最新位置")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "String", name = "Token", value = "token标记", required = true),
+            @ApiImplicitParam(name = "currentEconomy", value = "经度", paramType = "query", required = true, dataType = "String" ),
+
+            @ApiImplicitParam(name = "currentDimension", value = "纬度", paramType = "query", required = true, dataType = "String" )
+    })
+    @RequestMapping(value =  "/UploadCurrentLocation",method = RequestMethod.POST )
+    @ResponseBody
+    public String UploadCurrentLocation(@RequestParam(name = "currentEconomy") String currentEconomy,@RequestParam(name = "currentDimension") String currentDimension) {
+        String memberId = SessionVehicle.get(SessionVehicle.MEMBER_ID);
+       // log.warn("执行登录操作!");
+        //先执行登录验证的过滤操作,才会执行后面这些乱七八糟的异常
+        //throw new MyException("测试自定义异常!");
+        MemberInfo memberInfo=new MemberInfo();
+        memberInfo.setMemberId(Integer.valueOf(memberId));
+        memberInfo.setCurrentEconomy(currentEconomy);
+        memberInfo.setConstellation(currentDimension);
+       boolean fig=memberInfoService.updateById(memberInfo);
+
+
+        if (fig) {
+            return Result.Result("00000","上传当前位置成功");
+        }
+        return Result.Result("100002","上传当前位置失败");
+    }
+    /**
+     *会员列表
+     */
+    @ApiOperation(value = "首页展示的会员列表", notes = "首页展示的会员类表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "String", name = "Token", value = "token标记", required = true)
+    })
+    @RequestMapping(value =  "/HomepageDisplayPagination",method = RequestMethod.POST )
+    @ResponseBody
+    public String HomepageDisplayPagination(){
+        //PageHelper.startPage(pageNum,5);
+        List<MemberInfoDTO> list = memberInfoService.HomepageDisplayPagination();
+
+
+        return  Result.Result(RC.SUCCESS,list);
+    }
+
+    /**
+     *最新注册会员
+     */
+    @ApiOperation(value = "最新注册会员", notes = "最新注册会员")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "String", name = "Token", value = "token标记", required = true)
+    })
+    @RequestMapping(value =  "Latestregisteredmembers",method = RequestMethod.POST )
+    @ResponseBody
+    public String Latestregisteredmembers(){
+        //PageHelper.startPage(pageNum,5);
+        List<MemberInfoDTO> list = memberInfoService.Latestregisteredmembers();
+
+
+        return  Result.Result(RC.SUCCESS,list);
+    }
+
 }
 

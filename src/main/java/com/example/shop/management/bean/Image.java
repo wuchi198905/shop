@@ -30,7 +30,7 @@ public class Image extends Model<Image> {
      */
     private String path;
     /**
-     * 类型
+     * 类型  A  首页展示   B其他
      */
     private String type;
     /**

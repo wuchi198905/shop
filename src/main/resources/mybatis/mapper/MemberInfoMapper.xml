@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.shop.management.mapper.MemberInfoMapper">
+<mapper namespace="com.example.shop.pub.mapper.MemberInfoMapper">
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.shop.management.bean.MemberInfo">
@@ -44,5 +44,58 @@
     <sql id="Base_Column_List">
         member_id AS memberId, member_name AS memberName, member_gender AS memberGender, member_age AS memberAge, member_education AS memberEducation, member_weight AS memberWeight, member_height AS memberHeight, marital_status AS maritalStatus, WeChat_authentication_status AS wechatAuthenticationStatus, real_name_authentication_status AS realNameAuthenticationStatus, membership_level AS membershipLevel, openid, contact_number AS contactNumber, mailbox, province, city, area, address, password, id_number AS idNumber, account, we_chat_number AS weChatNumber, birthday, current_city AS currentCity, current_economy AS currentEconomy, current_dimension AS currentDimension, online, whether_upload_pictures AS whetherUploadPictures, member_source AS memberSource, constellation, account_status AS accountStatus, last_login_time AS lastLoginTime, registration_time AS registrationTime, sts
     </sql>
+<!--    查询会员头像年龄-->
+    <select id="HomepageDisplayPagination" resultType="com.example.shop.management.bean.DTO.MemberInfoDTO" parameterType="com.example.shop.management.bean.DTO.MemberInfoDTO">
+        SELECT a.member_age,a.province,a.city,b.path from member_info  a LEFT JOIN  image b on a.member_id=b.member_id  and b.type='A'
+        <where>
+            1=1
+            <if test="maxAge!=null">
+                and a.member_age &lt;=#{memberAge}
+            </if>
+            <if test="maxAge!=null">
+                and a.member_age &gt;=#{miniAge}
+            </if>
+            <if test="province!=null and province!='' ">
+                and a.province=#{province}
+            </if>
+            <if test="city!=null and city!='' ">
+                and a.city =#{city}
+            </if>
+            <if test="memberGender!=null and memberGender!='' ">
+                and a.member_gender =#{memberGender}
+            </if>
+            LIMIT 0,5
+        </where>
+    </select>
+<!--    最新注册会员 -->
+    <select id="Latestregisteredmembers" resultType="com.example.shop.management.bean.MemberInfo" parameterType="com.example.shop.management.bean.MemberInfo">
+        SELECT a.member_age,a.province,a.city,A.member_name  from member_info  a    where 1=1   ORDER BY registration_time  LIMIT 0,10
 
+    </select>
+    <!--    查询会员列表 -->
+    <select id="Latestregisteredmembers" resultType="com.example.shop.management.bean.MemberInfo" parameterType="com.example.shop.management.bean.MemberInfo">
+        SELECT member_id,member_name,member_gender,member_age,member_education member_weight,member_height,marital_status,WeChat_authentication_status,real_name_authentication_status,membership_level,contact_number,mailbox,province,city,area,address,id_number,account,we_chat_number,birthday,current_city,current_economy,current_dimension,whether_upload_pictures,member_source,constellation,account_status,last_login_time,registration_time FROM member_info
+        <where>
+            1=1
+            <if test="maxAge!=null">
+                and member_age &lt;=#{memberAge}
+            </if>
+            <if test="maxAge!=null">
+                and member_age &gt;=#{miniAge}
+            </if>
+            <if test="province!=null and province!='' ">
+                and province=#{province}
+            </if>
+            <if test="city!=null and city!='' ">
+                and city =#{city}
+            </if>
+            <if test="memberGender!=null and memberGender!='' ">
+                and member_gender =#{memberGender}
+            </if>
+            <if test="memberGender!=null and memberGender!='' ">
+                and member_gender =#{memberGender}
+            </if>
+        </where>
+        ORDER BY registration_time
+    </select>
 </mapper>

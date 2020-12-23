@@ -9,6 +9,7 @@ import com.example.shop.base.result.ResponseData;
 import com.example.shop.base.result.ResponseDataUtil;
 import com.example.shop.management.bean.MemberInfo;
 import com.example.shop.pub.Utils.RedisUtils;
+import com.example.shop.system.bean.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.*;
@@ -56,10 +59,33 @@ public class JwtFilter extends BasicHttpAuthenticationFilter implements Filter {
         JwtToken jwtToken = new JwtToken(token);
         // 提交给realm进行登入，如果错误他会抛出异常并被捕获
         try {
-            getSubject(request, response).login(jwtToken);
-            MemberInfo memberInfoMVO = (MemberInfo) commonUtil.redisUtils.get(token);
-            SessionVehicle.reflesh(memberInfoMVO);
-            return true;
+            ServletRequestAttributes attr=(ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            HttpServletRequest req =attr.getRequest();
+            String pathString=req.getServletPath();
+
+
+
+            String strDirPath = request.getServletContext().getRealPath("/");
+            String [] pathStrings=pathString.split("/");
+            if(pathStrings[1].equals("memberInfo")){
+                log.info(strDirPath);
+                getSubject(request, response).login(jwtToken);
+                MemberInfo memberInfoMVO = (MemberInfo) commonUtil.redisUtils.get(token);
+                SessionVehicle.reflesh(memberInfoMVO);
+                return true;
+            }if(pathStrings[1].equals("system")){
+                getSubject(request, response).login(jwtToken);
+                UserInfo memberInfoMVO = (UserInfo) commonUtil.redisUtils.get(token);
+                return true;
+            }
+            if(pathStrings[1].equals("api")){
+                getSubject(request, response).login(jwtToken);
+                return true;
+            }else {
+                return false;
+            }
+
+
         } catch (AuthenticationException e) {
               ResponseData responseData = ResponseDataUtil.authorizationFailed( "没有访问权限，原因是:" + e.getMessage());
 //            //SerializerFeature.WriteMapNullValue为了null属性也输出json的键值对

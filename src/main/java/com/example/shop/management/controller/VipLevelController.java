@@ -17,5 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/vipLevel")
 public class VipLevelController {
 
+
 }
 

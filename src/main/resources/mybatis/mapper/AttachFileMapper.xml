@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.shop.pub.mapper.AttachFileMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.shop.pub.bean.AttachFile">
+        <id column="file_id" property="fileId" />
+        <result column="file_type" property="fileType" />
+        <result column="file_name" property="fileName" />
+        <result column="save_name" property="saveName" />
+        <result column="state" property="state" />
+        <result column="sts" property="sts" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        file_id AS fileId, file_type AS fileType, file_name AS fileName, save_name AS saveName, state, sts, create_time AS createTime, update_time AS updateTime
+    </sql>
+
+</mapper>

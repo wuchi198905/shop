@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.shop.system.mapper.FuncListMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.shop.system.bean.FuncList">
+        <id column="func_id" property="funcId" />
+        <result column="parent_id" property="parentId" />
+        <result column="menu_title" property="menuTitle" />
+        <result column="menu_desc" property="menuDesc" />
+        <result column="menu_icon" property="menuIcon" />
+        <result column="menu_url" property="menuUrl" />
+        <result column="menu_level" property="menuLevel" />
+        <result column="list_order" property="listOrder" />
+        <result column="right_code" property="rightCode" />
+        <result column="remark" property="remark" />
+        <result column="sts" property="sts" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        func_id AS funcId, parent_id AS parentId, menu_title AS menuTitle, menu_desc AS menuDesc, menu_icon AS menuIcon, menu_url AS menuUrl, menu_level AS menuLevel, list_order AS listOrder, right_code AS rightCode, remark, sts
+    </sql>
+     <select id="queryList" resultType="com.example.shop.management.bean.DTO.FuncListDTO">
+         SELECT func_id,parent_id,menu_title,menu_desc,menu_icon,menu_url,menu_level,list_order,right_code,remark,sts FROM FUNC_LIST
+
+<where>
+        1=1
+        <if test="funcId!=null and funcId!='' ">
+            AND func_id=#{funcId}
+        </if>
+         <if test="parentId!=null and parentId!='' ">
+             AND parent_id=#{parentId}
+         </if>
+
+         <if test="menuTitle!=null and menuTitle!='' ">
+             AND menu_title=#{menuTitle}
+         </if>
+         <if test="menuDesc!=null and menuDesc!='' ">
+             AND menu_desc=#{menuDesc}
+         </if>
+         <if test="menuUrl!=null and menuUrl!='' ">
+             AND menu_url=#{menuDesc}
+         </if>
+
+         <if test="menuLevel!=null and menuLevel!='' ">
+             AND menu_level=#{menuLevel}
+         </if>
+        <if test="listOrder!=null and listOrder!='' ">
+            AND list_order=#{listOrder}
+        </if>
+
+         <if test="rightCode!=null and rightCode!='' ">
+             AND right_code=#{rightCode}
+         </if>
+         <if test="sts!=null and sts!='' ">
+             AND sts=#{sts}
+         </if>
+             ORDER BY list_order
+</where>
+     </select>
+    <select id="queryLevel2FuncByUserId" resultType="com.example.shop.management.bean.DTO.FuncListDTO">
+            SELECT func_id,parent_id,menu_title,menu_desc,menu_icon,menu_url,menu_level,list_order,right_code,remark,sts FROM func_list t WHERE t.sts='A' AND t.menu_level=2 ORDER BY t.parent_id,t.list_order
+    </select>
+    <select id="queryLevel3FuncByUserId" resultType="com.example.shop.management.bean.DTO.FuncListDTO">
+            SELECT func_id,parent_id,menu_title,menu_desc,menu_icon,menu_url,menu_level,list_order,right_code,remark,sts FROM func_list t WHERE t.sts='A' AND t.menu_level=3 ORDER BY t.parent_id,t.list_order
+    </select>
+</mapper>

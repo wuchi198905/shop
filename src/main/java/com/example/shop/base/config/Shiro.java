@@ -51,11 +51,13 @@ public class Shiro {
         //前后端带login登录的或者其他登录的通通放行
         filterChainDefinitionMap.put("/**/login/**", "anon");
         filterChainDefinitionMap.put("/**.js", "anon");
-        filterChainDefinitionMap.put("/druid/**", "anon");
+        filterChainDefinitionMap.put("/data/**", "anon");
         filterChainDefinitionMap.put("/swagger**/**", "anon");
         filterChainDefinitionMap.put("/**/swagger**/**", "anon");
         filterChainDefinitionMap.put("/webjars/**", "anon");
         filterChainDefinitionMap.put("/v2/**", "anon");
+        filterChainDefinitionMap.put("/system/captcha/**", "anon");
+        filterChainDefinitionMap.put("/attachFile/**", "anon");
         // 添加自己的过滤器并且取名为jwt
         Map<String, Filter> filterMap = new HashMap<String, Filter>(1);
         filterMap.put("jwt", new JwtFilter());
