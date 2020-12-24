@@ -5,11 +5,14 @@ package com.example.shop.management.controller;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.example.shop.base.SessionVehicle;
+import com.example.shop.base.json.ApiUtil;
 import com.example.shop.base.json.RC;
 import com.example.shop.base.json.Result;
 import com.example.shop.management.bean.DTO.MemberInfoDTO;
 import com.example.shop.management.bean.LoginUser;
 import com.example.shop.management.bean.MemberInfo;
+import com.example.shop.pub.Utils.RedisUtils;
+import com.example.shop.pub.service.IMailService;
 import com.example.shop.pub.service.MemberInfoService;
 import com.example.shop.pub.Utils.IDUtils;
 import com.example.shop.pub.Utils.VerifyImageUtil;
@@ -45,14 +48,18 @@ import org.springframework.ui.Model;
 public class MemberInfoController {
     @Autowired
     private  MemberInfoService memberInfoService;
+    @Autowired
+    private IMailService iMailService;
+    @Autowired
+    private RedisUtils redisUtils;
     /**
      * 注册会员
      */
-    @ApiOperation(value = "注册", notes = "通过手机号注册账号")
+    @ApiOperation(value = "注册", notes = "注册账号")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "password", value = "密码", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "code", value = "验证码", paramType = "query", required = true, dataType = "String" )})
+            @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "password", value = "密码", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "code", value = "验证码", paramType = "query", required = true, dataType = "string" )})
 
 
     @RequestMapping(value = "registered", method = RequestMethod.POST)
@@ -68,8 +75,8 @@ public class MemberInfoController {
      */
     @ApiOperation(value = "获取手机验证码", notes = "通过手机号获取验证码")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "code", value = "图形验证码", paramType = "query", required = true, dataType = "String" )})
+            @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "code", value = "图形验证码", paramType = "query", required = true, dataType = "string" )})
 
 
     @RequestMapping(value = "getVerificationCode", method = RequestMethod.POST)
@@ -93,7 +100,7 @@ public class MemberInfoController {
     @GetMapping
     @ApiOperation(value = "获取图形验证码", notes = "获取图形验证码")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "string" ),
            })
     @RequestMapping(value = "index",method = RequestMethod.GET)
     public String test(HttpServletRequest request, Model model) throws IOException {
@@ -102,7 +109,7 @@ public class MemberInfoController {
     @ApiOperation(value = "获取图形验证码", notes = "获取图形验证码")
     @GetMapping
     @ApiImplicitParams({
-            //@ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "String" ),
+            //@ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "string" ),
     })
     @RequestMapping(value = "getPic",method = RequestMethod.POST)
     public @ResponseBody Map < String, Object > getPic(HttpServletRequest request) throws IOException {
@@ -136,7 +143,7 @@ public class MemberInfoController {
     @ApiOperation(value = "获取图形验证码", notes = "获取图形验证码")
     @GetMapping
     @ApiImplicitParams({
-           // @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "String" ),
+           // @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "string" ),
     })
     @RequestMapping(value = "checkcapcode" ,method = RequestMethod.POST)
     public @ResponseBody Map < String, Object > checkcapcode(@RequestParam("xpos") int xpos,
@@ -163,24 +170,24 @@ public class MemberInfoController {
      */
     @ApiOperation(value = "完善信息", notes = "完善会员的基本信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", dataType = "String", name = "Token", value = "token标记", required = true),
-            @ApiImplicitParam(name = "memberName", value = "姓名", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "memberGender", value = "性别  ：男：A  女：B", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "memberAge", value = "年龄", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "memberEducation", value = "学历", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "memberWeight", value = "体重", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "maritalStatus", value = "0  未婚 1已婚 2离异 3丧偶 ", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "contactNumber", value = "联系电话", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "mailbox", value = "邮箱", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "province", value = "省", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "city", value = "市", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "area", value = "区", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "address", value = "详细地址", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "idNumber", value = "身份证编号", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "weChatNumber", value = "微信号", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true),
+            @ApiImplicitParam(name = "memberName", value = "姓名", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "memberGender", value = "性别  ：男：A  女：B", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "memberAge", value = "年龄", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "memberEducation", value = "学历", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "memberWeight", value = "体重", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "maritalStatus", value = "0  未婚 1已婚 2离异 3丧偶 ", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "contactNumber", value = "联系电话", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "mailbox", value = "邮箱", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "province", value = "省", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "city", value = "市", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "area", value = "区", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "address", value = "详细地址", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "idNumber", value = "身份证编号", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "weChatNumber", value = "微信号", paramType = "query", required = true, dataType = "string" ),
             @ApiImplicitParam(name = "birthday", value = "生日", paramType = "query", required = true, dataType = "Date" ),
-            @ApiImplicitParam(name = "constellation", value = "星座", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "memberHeight", value = "身高", paramType = "query", required = true, dataType = "String" )
+            @ApiImplicitParam(name = "constellation", value = "星座", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "memberHeight", value = "身高", paramType = "query", required = true, dataType = "string" )
          })
 
     @RequestMapping(value =  "/perfectInformation",method = RequestMethod.POST )
@@ -227,8 +234,8 @@ public class MemberInfoController {
 
     @ApiImplicitParams({
 
-            @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "password", value = "密码", paramType = "query", required = true, dataType = "String" )
+            @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "password", value = "密码", paramType = "query", required = true, dataType = "string" )
     })
 
     @RequestMapping(value =  "/login",method = RequestMethod.POST )
@@ -258,10 +265,10 @@ public class MemberInfoController {
 
     @ApiOperation(value = "上传会员登录时的最新位置", notes = "上传会员登录时的最新位置")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", dataType = "String", name = "Token", value = "token标记", required = true),
-            @ApiImplicitParam(name = "currentEconomy", value = "经度", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true),
+            @ApiImplicitParam(name = "currentEconomy", value = "经度", paramType = "query", required = true, dataType = "string" ),
 
-            @ApiImplicitParam(name = "currentDimension", value = "纬度", paramType = "query", required = true, dataType = "String" )
+            @ApiImplicitParam(name = "currentDimension", value = "纬度", paramType = "query", required = true, dataType = "string" )
     })
     @RequestMapping(value =  "/UploadCurrentLocation",method = RequestMethod.POST )
     @ResponseBody
@@ -287,7 +294,7 @@ public class MemberInfoController {
      */
     @ApiOperation(value = "首页展示的会员列表", notes = "首页展示的会员类表")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", dataType = "String", name = "Token", value = "token标记", required = true)
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true)
     })
     @RequestMapping(value =  "/HomepageDisplayPagination",method = RequestMethod.POST )
     @ResponseBody
@@ -304,7 +311,7 @@ public class MemberInfoController {
      */
     @ApiOperation(value = "最新注册会员", notes = "最新注册会员")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", dataType = "String", name = "Token", value = "token标记", required = true)
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true)
     })
     @RequestMapping(value =  "Latestregisteredmembers",method = RequestMethod.POST )
     @ResponseBody
@@ -316,5 +323,35 @@ public class MemberInfoController {
         return  Result.Result(RC.SUCCESS,list);
     }
 
+    /**
+     * 发送邮箱验证码
+     */
+    @ApiOperation(value = "发送邮箱验证码", notes = "发送邮箱验证码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "account", value = "邮箱", paramType = "query", required = true, dataType = "string"),
+    })
+
+
+    @RequestMapping(value = "getVerificationMailCode", method = RequestMethod.POST)
+    @ResponseBody
+    public String getVerificationMailCode(@RequestParam(name = "account") String account) {
+        int mun=memberInfoService.selectCount(new EntityWrapper<MemberInfo>().eq("account",account));
+        if(mun>0){
+            return Result.Result(RC.REGIST_PARAM_MOBILE_OCCUPIED);
+        }
+        String code= ApiUtil.generateSmsCode();
+        MemberInfo memberInfo=new MemberInfo();
+        memberInfo.setAccount(account);
+
+        log.info("验证犸是   "+code);
+        iMailService.sendSimpleMail(account,"验证码","注册验证码是"+code+"，请不要告诉其他人");
+        redisUtils.set(account,code,60L);
+        boolean fig=memberInfoService.getVerificationCode(account);
+
+        if(fig){
+            return Result.Result("00000","获取验证码成功");
+        }
+        return Result.Result(RC.REGIST_PARAM_TYPE_INVALID);
+    }
 }
 

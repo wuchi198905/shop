@@ -36,23 +36,23 @@ public class MemberInfoSystemController {
 
     @ApiOperation(value = "查询菜单列表", notes = "查询菜单列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "pageNum", value = "当前页数", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "pageNum", value = "当前页数", paramType = "query", required = true, dataType = "string" ),
     })
     @ResponseBody
     @RequestMapping(path = "/memberInfoPagination", method = {RequestMethod.POST})
-    public String MenuPagination(MemberInfo memberInfo, @PathVariable("pageNum") int pageNum) {
+    public String MenuPagination(MemberInfo memberInfo, int pageNum) {
 
         PageHelper.startPage(pageNum,10);
         List<MemberInfo> users=memberInfoService.MenuPagination(memberInfo);
         PageInfo<MemberInfo> pageInfo = new PageInfo<MemberInfo>(users);
-        return pageInfo.toString();
+        return  Result.Result(RC.SUCCESS,pageInfo);
     }
 
     @ApiOperation(value = "会员详细信息", notes = "会员详细信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "memberId", value = "会员主键", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "memberId", value = "会员主键", paramType = "query", required = true, dataType = "string" ),
     })
     @ResponseBody
     @RequestMapping(path = "/memberInfoSeletOne", method = {RequestMethod.POST})
@@ -60,7 +60,7 @@ public class MemberInfoSystemController {
 
 
             memberInfo=memberInfoService.selectById(memberInfo);
-
+            memberInfo.setPassword(null);
          return  Result.Result(RC.SUCCESS,memberInfo);
     }
 

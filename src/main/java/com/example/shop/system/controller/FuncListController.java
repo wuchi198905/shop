@@ -40,8 +40,8 @@ public class FuncListController {
     private FuncListService funcListService;
     @ApiOperation(value = "查询菜单列表", notes = "查询菜单列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "pageNum", value = "当前页数", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "pageNum", value = "当前页数", paramType = "query", required = true, dataType = "string" ),
     })
     @ResponseBody
     @RequestMapping(path = "/MenuPagination", method = {RequestMethod.POST})
@@ -54,14 +54,14 @@ public class FuncListController {
     }
     @ApiOperation(value = "新增菜单", notes = "新增菜单")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "parentId", value = "上一级id，没有为空", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "menuTitle", value = "菜单标题", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "menuDesc", value = "菜单描述", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "menuIcon", value = "菜单图片", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "menuUrl", value = "地址", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "menuLevel", value = "菜单级别  1   2   3", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "listOrder", value = "排序", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "parentId", value = "上一级id，没有为空", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "menuTitle", value = "菜单标题", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "menuDesc", value = "菜单描述", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "menuIcon", value = "菜单图片", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "menuUrl", value = "地址", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "menuLevel", value = "菜单级别  1   2   3", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "listOrder", value = "排序", paramType = "query", required = true, dataType = "string" ),
     })
     @ResponseBody
     @RequestMapping(path = "/addFuncList", method = {RequestMethod.POST})
@@ -75,15 +75,15 @@ public class FuncListController {
     }
     @ApiOperation(value = "修改菜单", notes = "修改菜单")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "funcId", value = "主键id", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "parentId", value = "上一级id，没有为空", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "menuTitle", value = "菜单标题", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "menuDesc", value = "菜单描述", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "menuIcon", value = "菜单图片", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "menuUrl", value = "地址", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "menuLevel", value = "菜单级别  1   2   3", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "listOrder", value = "排序", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "funcId", value = "主键id", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "parentId", value = "上一级id，没有为空", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "menuTitle", value = "菜单标题", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "menuDesc", value = "菜单描述", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "menuIcon", value = "菜单图片", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "menuUrl", value = "地址", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "menuLevel", value = "菜单级别  1   2   3", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "listOrder", value = "排序", paramType = "query", required = true, dataType = "string" ),
     })
     @ResponseBody
     @RequestMapping(path = "/updateFuncList", method = {RequestMethod.POST})
@@ -97,8 +97,8 @@ public class FuncListController {
     }
     @ApiOperation(value = "删除菜单", notes = "删除菜单")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "funcId", value = "主键id", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "funcId", value = "主键id", paramType = "query", required = true, dataType = "string" ),
 
     })
     @ResponseBody

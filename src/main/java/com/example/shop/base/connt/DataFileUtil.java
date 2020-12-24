@@ -35,19 +35,19 @@ public class DataFileUtil {
     }
     private static Logger logger = LoggerFactory.getLogger(DataFileUtil.class);
     public final static String DATA_DIR = "data/";
-    public final static String ATTACH_IMAGE_DIR = "/static/data/attach/image/";
+    public final static String ATTACH_IMAGE_DIR = "/data/attach/image/";
     public final static String url = "data/attach/file/";
 
     /**
      * 保存上传图片到目标文件夹
      * @param imgFile
-     * @param saveDb
+     * @param
      * @return
      */
     public static String saveDBImage(MultipartFile imgFile) throws FileNotFoundException {
         // 保存路径
         String relativePath = ATTACH_IMAGE_DIR + DateUtil.now("yyyyMMdd");
-        String path = ResourceUtils.getURL("classpath:").getPath() + relativePath;
+        String path = ResourceUtils.getURL("classpath:").getPath()+"/static" + relativePath;
         File imgDir = new File(path);
         if (!imgDir.exists()) {
             imgDir.mkdirs();
@@ -81,6 +81,26 @@ public class DataFileUtil {
         return uuid;
     }
 
+    /**
+     * 删除图片到目标文件夹
+     * @param fileId
+     * @param
+     * @return
+     */
+    public static Boolean delectDBImage(String fileId)throws FileNotFoundException {
+        // 保存路径
 
+
+        String path = ResourceUtils.getURL("classpath:").getPath()+"/static";
+        AttachFile attach=commonUtil.attachFileService.selectById(fileId);
+        String filepath = path+attach.getSaveName();
+        File file = new File(filepath,attach.getFileName());
+        // 保存到数据库
+        attach.setSts("P");
+
+
+
+        return commonUtil.attachFileService.updateById(attach);
+    }
 
 }

@@ -44,7 +44,7 @@ public class MainController {
     @ApiOperation(value = "获取图形验证码", notes = "获取图形验证码")
     @ApiImplicitParams({
 
-            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "string" ),
 
     })
     @ResponseBody
@@ -67,7 +67,14 @@ public class MainController {
         try {
             GifCaptcha gifCaptcha =  new GifCaptcha(114, 42, new Font("Consolas", Font.BOLD, 30), 100);
             gifCaptcha.out(response.getOutputStream());
-            redisUtils.set(sessionKey,gifCaptcha.getWord(),60000L);
+
+            redisUtils.remove(sessionKey);
+            redisUtils.removePattern(sessionKey);
+
+            redisUtils.set(sessionKey,gifCaptcha.getWord(),60L);
+            log.info((String)redisUtils.get(sessionKey));
+            log.info(sessionKey);
+
         } catch (Exception e) {
             log.error("生成验证码出错", e);
         }

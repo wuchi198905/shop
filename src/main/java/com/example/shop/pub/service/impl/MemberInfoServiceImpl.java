@@ -71,7 +71,7 @@ public class MemberInfoServiceImpl extends ServiceImpl<MemberInfoMapper, MemberI
 //            //throwSysException(RC.OTHER_SMSCODE_ERROR);
 //           return false;
 //        }
-        redisUtils.set(account,code,3600L);
+        redisUtils.set(account,code,60L);
         return true;
     }
 
@@ -101,7 +101,7 @@ public class MemberInfoServiceImpl extends ServiceImpl<MemberInfoMapper, MemberI
         loginUser.setUser(user1);
         //根据电话号码和密码加密生成token
         String token = JwtUtil.sign(user1.getAccount(), user1.getPassword());
-        redisUtils.set(token,user1,10000L);
+        redisUtils.set(token,user1,3600L);
         loginUser.setToken(token);
         return loginUser;
     }

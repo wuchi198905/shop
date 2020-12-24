@@ -29,8 +29,8 @@ public class ImageSystemController {
      */
     @ApiOperation(value = "会员图片列表分页", notes = "会员图片列表分页")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "pageNum", value = "当前页数", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "pageNum", value = "当前页数", paramType = "query", required = true, dataType = "string" ),
     })
     @ResponseBody
     @RequestMapping(path = "/imagePagination", method = {RequestMethod.POST})
@@ -43,9 +43,9 @@ public class ImageSystemController {
     }
     @ApiOperation(value = "会员图片审核", notes = "会员图片列表分页")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "imageId", value = "主键id", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "status", value = "状态  1  审核通过  0未审核  2  审核未通过", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "imageId", value = "主键id", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "status", value = "状态  1  审核通过  0未审核  2  审核未通过", paramType = "query", required = true, dataType = "string" ),
     })
     @ResponseBody
     @RequestMapping(path = "/imageExamine", method = {RequestMethod.POST})

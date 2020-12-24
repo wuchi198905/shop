@@ -23,7 +23,16 @@ public enum RC {
     /**
      * 登录
      */
-    LOGIN_USER_ISNOT("30001", "用户不存在");
+    LOGIN_USER_ISNOT("30001", "用户不存在"),
+    /**
+     * 活动报名
+     */
+    Enrollment_activityId_ISNOT("30001", "用户不存在"),
+    /**
+     * 登录
+     */
+    system_erry("99999", "系统错误，请联系客服");
+
   
     public String code;
     public String msg;

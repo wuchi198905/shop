@@ -29,7 +29,7 @@ public class EnrollmentStaff extends Model<EnrollmentStaff> {
     @TableId(value = "personnel_id", type = IdType.AUTO)
     private Integer personnelId;
     /**
-     * 0：预约中， 1 待审核  2 报名成功 
+     * 0：预约中， 1 待审核  2 报名成功  3取消报名
      */
     @TableField("activity_id")
     private String activityId;

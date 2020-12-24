@@ -58,6 +58,11 @@ public class Shiro {
         filterChainDefinitionMap.put("/v2/**", "anon");
         filterChainDefinitionMap.put("/system/captcha/**", "anon");
         filterChainDefinitionMap.put("/attachFile/**", "anon");
+        filterChainDefinitionMap.put("/memberInfo/getVerificationMailCode", "anon");
+        filterChainDefinitionMap.put("/memberInfo/activity/**", "anon");
+        filterChainDefinitionMap.put("/memberInfo/carousel/**", "anon");
+        filterChainDefinitionMap.put("/memberInfo/carousel/**", "anon");
+
         // 添加自己的过滤器并且取名为jwt
         Map<String, Filter> filterMap = new HashMap<String, Filter>(1);
         filterMap.put("jwt", new JwtFilter());

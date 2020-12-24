@@ -1,8 +1,11 @@
 package com.example.shop.pub.mapper;
 
+import com.example.shop.management.bean.Activity;
 import com.example.shop.management.bean.EnrollmentStaff;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,4 +18,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface EnrollmentStaffMapper extends BaseMapper<EnrollmentStaff> {
 
+    List<Activity> MyenrollmentStaffpage(EnrollmentStaff enrollmentStaff);
 }

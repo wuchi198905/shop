@@ -15,6 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,7 @@ import java.util.Map;
  * @author 陈志浩123
  * @since 2020-12-22
  */
+@Slf4j
 @Api(description = "后台用户登录控制")
 @RestController
 @RequestMapping("/system/userInfo")
@@ -48,10 +50,10 @@ public class UserInfoController {
     private RedisUtils redisUtils;
     @ApiOperation(value = "登录接口", notes = "登录系统")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "username", value = "username", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "password", value = "username", paramType = "query", required = true, dataType = "String" ),
-            @ApiImplicitParam(name = "code", value = "验证码", paramType = "query", required = true, dataType = "String" ),
+            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "username", value = "username", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "password", value = "username", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "code", value = "验证码", paramType = "query", required = true, dataType = "string" ),
     })
     @ResponseBody
     @RequestMapping(path = "/login", method = {RequestMethod.POST})
@@ -60,7 +62,13 @@ public class UserInfoController {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String  code= request.getParameter("code");
-       String  oldcode= (String) redisUtils.get(token);
+
+        if(!redisUtils.exists(token)){
+            return Result.Result("30004","验证码已失效请重新获取", ApiUtil.generateToken());
+        }
+        String  oldcode= (String) redisUtils.get(token);
+       log.info(oldcode);
+       log.info(token);
         if(StringUtils.isBlank(code)){
             return Result.Result("30002","验证码不能为空", ApiUtil.generateToken());
         }
@@ -73,6 +81,7 @@ public class UserInfoController {
         memberInfo.setUsername(username);
         LoginUser loginUser=new LoginUser();
          loginUser = userInfoService.login(memberInfo);
+        redisUtils.remove(token);
          if(loginUser.isLogin()){
              return Result.Result(RC.SUCCESS,loginUser.getToken());
          }
@@ -81,7 +90,7 @@ public class UserInfoController {
 
     @ApiOperation(value = "获取菜单", notes = "获取菜单")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", dataType = "String", name = "Token", value = "token标记", required = true)
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true)
     })
     @ResponseBody
     @RequestMapping(path = "/main/buildMenu", method = {RequestMethod.POST})

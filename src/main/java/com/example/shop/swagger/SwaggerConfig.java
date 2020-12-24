@@ -39,7 +39,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 //页面标题
-                .title("Spring Boot 使用 Swagger2 构建RESTful API")
+                .title("征婚系统api")
                 //创建人
                 .contact(new Contact("Bryan", "http://blog.bianxh.top/", ""))
                 //版本号

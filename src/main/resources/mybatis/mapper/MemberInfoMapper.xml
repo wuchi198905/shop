@@ -73,16 +73,16 @@
 
     </select>
     <!--    查询会员列表 -->
-    <select id="Latestregisteredmembers" resultType="com.example.shop.management.bean.MemberInfo" parameterType="com.example.shop.management.bean.MemberInfo">
-        SELECT member_id,member_name,member_gender,member_age,member_education member_weight,member_height,marital_status,WeChat_authentication_status,real_name_authentication_status,membership_level,contact_number,mailbox,province,city,area,address,id_number,account,we_chat_number,birthday,current_city,current_economy,current_dimension,whether_upload_pictures,member_source,constellation,account_status,last_login_time,registration_time FROM member_info
+    <select id="getmemberInfopage" resultType="com.example.shop.management.bean.MemberInfo" parameterType="com.example.shop.management.bean.DTO.MemberInfoDTO">
+        SELECT member_id,member_name,member_gender,member_age,member_education,member_weight,member_height,marital_status,WeChat_authentication_status,real_name_authentication_status,membership_level,contact_number,mailbox,province,city,area,address,id_number,account,we_chat_number,birthday,current_city,current_economy,current_dimension,whether_upload_pictures,member_source,constellation,account_status,last_login_time,registration_time FROM member_info
         <where>
             1=1
-            <if test="maxAge!=null">
-                and member_age &lt;=#{memberAge}
-            </if>
-            <if test="maxAge!=null">
-                and member_age &gt;=#{miniAge}
-            </if>
+<!--            <if test="maxAge!=null">-->
+<!--                and member_age &lt;=#{memberAge}-->
+<!--            </if>-->
+<!--            <if test="maxAge!=null">-->
+<!--                and member_age &gt;=#{miniAge}-->
+<!--            </if>-->
             <if test="province!=null and province!='' ">
                 and province=#{province}
             </if>

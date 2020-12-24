@@ -3,9 +3,11 @@ package com.example.shop.management.controller;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.example.shop.base.SessionVehicle;
+import com.example.shop.base.connt.DataFileUtil;
 import com.example.shop.base.json.RC;
 import com.example.shop.base.json.Result;
 import com.example.shop.management.bean.Image;
+import com.example.shop.pub.Utils.ImageType;
 import com.example.shop.pub.bean.AttachFile;
 import com.example.shop.pub.service.AttachFileService;
 import com.example.shop.pub.service.ImageService;
@@ -28,6 +30,7 @@ import java.util.List;
  * @author 陈志浩123
  * @since 2020-12-16
  */
+@Api(description = "个人照片的管理接口")
 @RestController
 @RequestMapping("/memberInfo/image")
 public class ImageController {
@@ -36,12 +39,10 @@ public class ImageController {
     @Autowired
     private AttachFileService attachFileService;
 
-    private String sava_path = "http://192.168.124.9:88";
-
-    @ApiOperation(value = "上传图片", notes = "上传图片", httpMethod = "POST")
+    @ApiOperation(value = "添加个人图片", notes = "添加个人图片", httpMethod = "POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", dataType = "String", name = "Token", value = "token标记", required = true),
-            @ApiImplicitParam(name = "fileId", value = "上传图片后获取的fileId", paramType = "query", required = true, dataType = "String" )
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true),
+            @ApiImplicitParam(name = "fileId", value = "上传图片后获取的fileId", paramType = "query", required = true, dataType = "string")
     })
     @RequestMapping(path = "/save_photo", method = {RequestMethod.POST})
     public String addDish(String fileId) throws Exception {
@@ -54,7 +55,7 @@ public class ImageController {
         } else {
             image.setType("A");
         }
-        AttachFile file1=attachFileService.selectOne(new EntityWrapper<AttachFile>().eq("file_id",fileId));
+        AttachFile file1 = attachFileService.selectOne(new EntityWrapper<AttachFile>().eq("file_id", fileId));
         image.setPath(file1.getSaveName());
         image.setStatus("0");
         image.setCreationTime(new Date());
@@ -66,46 +67,77 @@ public class ImageController {
     }
 
 
+    /**
+     * 设置头衔接口
+     */
 
-/**
- * 设置头衔接口
- */
+    @ApiOperation(value = "设置头衔接口", notes = "设置头衔接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true),
+            @ApiImplicitParam(name = "imageId", value = "图片id", paramType = "query", required = true, dataType = "string"),
 
-@ApiOperation(value = "设置头衔接口", notes = "设置头衔接口")
-@ApiImplicitParams({
-        @ApiImplicitParam(paramType = "header", dataType = "String", name = "Token", value = "token标记", required = true),
-        @ApiImplicitParam(name = "imageId", value = "图片id", paramType = "query", required = true, dataType = "String"),
-
-})
-@RequestMapping(value = "Latestregisteredmembers", method = RequestMethod.POST)
-@ResponseBody
-public String Latestregisteredmembers(Integer imageId){
-        String memberId=SessionVehicle.get(SessionVehicle.MEMBER_ID);
-        Image image=imageService.selectOne(new EntityWrapper<Image>().eq("member_id",memberId).eq("type","A"));
+    })
+    @RequestMapping(value = "Latestregisteredmembers", method = RequestMethod.POST)
+    @ResponseBody
+    public String Latestregisteredmembers(Integer imageId) {
+        String memberId = SessionVehicle.get(SessionVehicle.MEMBER_ID);
+        Image image = imageService.selectOne(new EntityWrapper<Image>().eq("member_id", memberId).eq("type", "A"));
         image.setType("B");
         imageService.updateById(image);
-        Image image2=new Image();
+        Image image2 = new Image();
         image2.setType("A");
         image2.setImageId(imageId);
         imageService.updateById(image2);
         return Result.Result(RC.SUCCESS);
+    }
+
+    /**
+     * 查询我的图片
+     */
+
+    @ApiOperation(value = "查询我的照片", notes = "查询我的照片")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true),
+
+    })
+    @RequestMapping(value = "QueryMyphotos", method = RequestMethod.POST)
+    @ResponseBody
+    public String Queryphotos() {
+        String memberId = SessionVehicle.get(SessionVehicle.MEMBER_ID);
+        List<Image> image = imageService.selectList(new EntityWrapper<Image>().eq("member_id", memberId));
+
+        return Result.Result(RC.SUCCESS, image);
+    }
+
+
+    /**
+     * 上传文件
+     *
+     * @param file
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(path = "/uploadImage", method = {RequestMethod.POST})
+    public String uploadImage(@RequestParam("file") MultipartFile file) {
+        try {
+            // throwAppException(!SessionMember.isLogined(), RC.OTHER_TOKEN_TIMEOUT);
+
+            String fileName = file.getName();
+            String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+            if (!(ImageType.IMG_TYPE_DMG.equals(suffix.toUpperCase()) ||
+                    ImageType.IMG_TYPE_GIF.equals(suffix.toUpperCase()) ||
+                    ImageType.IMG_TYPE_JPEG.equals(suffix.toUpperCase()) ||
+                    ImageType.IMG_TYPE_JPG.equals(suffix.toUpperCase()) ||
+                    ImageType.IMG_TYPE_PNG.equals(suffix.toUpperCase()) ||
+                    ImageType.IMG_TYPE_SVG.equals(suffix.toUpperCase()))) {
+                return Result.Result(RC.FILE_TYPE_Ereey);
+            }
+            String fileId = DataFileUtil.saveDBImage(file);
+
+            AttachFile file1 = attachFileService.selectOne(new EntityWrapper<AttachFile>().eq("file_id", fileId));
+            return Result.Result(RC.SUCCESS, file1);
+        } catch (Exception e) {
+            return Result.Result("40001", "上传文件出错", e);
         }
-/**
- * 查询我的图片
- */
-
-@ApiOperation(value = "查询我的照片", notes = "查询我的照片")
-@ApiImplicitParams({
-        @ApiImplicitParam(paramType = "header", dataType = "String", name = "Token", value = "token标记", required = true),
-
-})
-@RequestMapping(value = "QueryMyphotos", method = RequestMethod.POST)
-@ResponseBody
-public String Queryphotos(){
-        String memberId=SessionVehicle.get(SessionVehicle.MEMBER_ID);
-        List<Image>  image=imageService.selectList(new EntityWrapper<Image>().eq("member_id",memberId));
-
-        return Result.Result(RC.SUCCESS,image);
-        }
-        }
-
+    }
+}

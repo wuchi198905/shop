@@ -17,5 +17,19 @@
     <sql id="Base_Column_List">
         personnel_id AS personnelId, activity_id AS activityId, status, member_id AS memberId, creation_time AS creationTime, update_time AS updateTime, sts
     </sql>
-
+<select id="MyenrollmentStaffpage" resultType="com.example.shop.management.bean.Activity">
+SELECT
+	a.activity_id,
+	a.starting_time,
+	a.end_time,
+	a.type,
+	a.activity_area,
+	a.active_status,
+	a.activities,
+	a.creation_time,
+	a.update_time
+FROM
+	activity a
+LEFT JOIN enrollment_staff b ON a.activity_id = b.activity_id WHERE  b.member_id=#{memberId}
+</select>
 </mapper>

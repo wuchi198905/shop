@@ -70,7 +70,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         //根据电话号码和密码加密生成token
         loginUser.setUserInfo(user1);
         String token = JwtUtil.sign(user1.getUsername(), user1.getPassword());
-        redisUtils.set(token,user1,10000L);
+        redisUtils.set(token,user1,3600L);
         loginUser.setToken(token);
         loginUser.setLogin(true);
         return loginUser;

@@ -1,7 +1,10 @@
 package com.example.shop.pub.service;
 
+import com.example.shop.management.bean.Activity;
 import com.example.shop.management.bean.EnrollmentStaff;
 import com.baomidou.mybatisplus.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.service.IService;
  */
 public interface EnrollmentStaffService extends IService<EnrollmentStaff> {
 
+    List<Activity> MyenrollmentStaffpage(EnrollmentStaff enrollmentStaff);
 }
