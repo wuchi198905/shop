@@ -230,6 +230,7 @@ public class MemberInfoController {
         }
         String VHEICLEiD = SessionVehicle.get(SessionVehicle.MEMBER_ID);
         memberInfo.setMemberId(Integer.valueOf(VHEICLEiD));
+        memberInfo.setRealNameAuthenticationStatus("1");
         memberInfoService.updateById(memberInfo);
         memberInfo = memberInfoService.selectById(memberInfo);
         memberInfo.setPassword(null);
@@ -270,6 +271,7 @@ public class MemberInfoController {
         Map<String, String> map2 = new HashMap<>();
         map2.put("token", loginUser.getToken());
         map2.put("username", user1.getUserName());
+        map2.put("Status", user1.getRealNameAuthenticationStatus());
         if (loginUser != null) {
             return Result.Result("00000", "登录成功", map2);
         }

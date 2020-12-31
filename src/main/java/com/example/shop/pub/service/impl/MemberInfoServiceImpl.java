@@ -58,8 +58,11 @@ public class MemberInfoServiceImpl extends ServiceImpl<MemberInfoMapper, MemberI
                 memberInfo=memberInfoMapper.selectOne(memberInfo);
                 String token = JwtUtil.sign(account, password);
                 redisUtils.set(token,memberInfo,3600L);
-
-                return Result.Result(RC.SUCCESS,token);
+                Map<String, String> map2 = new HashMap<>();
+                map2.put("token", token);
+                map2.put("username", memberInfo.getUserName());
+                map2.put("Status", memberInfo.getRealNameAuthenticationStatus());
+                return Result.Result(RC.SUCCESS,map2);
             }else{
                 return Result.Result(RC.REGIST_PARAM_SMSCODE_INVALID);
             }
