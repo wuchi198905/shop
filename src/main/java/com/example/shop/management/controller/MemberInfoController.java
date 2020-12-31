@@ -203,7 +203,7 @@ public class MemberInfoController {
         if(StringUtils.isBlank(memberInfo.getMemberGender())){
             return Result.Result(RC.PERFCT_MEMBERGRNDER_ISNOTNULL);
         }
-        if(StringUtils.isBlank(memberInfo.getMemberAge().toString())){
+        if(memberInfo.getMemberAge()==null){
             return Result.Result(RC.PERFCT_MEBERAGE_ISNOTNULL);
         }
         if(StringUtils.isBlank(memberInfo.getMemberEducation())){

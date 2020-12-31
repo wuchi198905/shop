@@ -49,8 +49,6 @@ public class AttachFileSystemController {
         try {
             Page<AttachFile> page=new Page<>(connt,pageNum);
             Page page1=attachFileService.selectMapsPage(page,new EntityWrapper<AttachFile>().eq("type",fileName));
-
-
             return Result.Result(RC.SUCCESS, page1);
         } catch (Exception e) {
             return Result.Result("40001","上传文件出错", e);

@@ -57,10 +57,15 @@ public class Shiro {
         filterChainDefinitionMap.put("/webjars/**", "anon");
         filterChainDefinitionMap.put("/v2/**", "anon");
         filterChainDefinitionMap.put("/system/captcha/**", "anon");
-        filterChainDefinitionMap.put("/attachFile/**", "anon");
         filterChainDefinitionMap.put("/memberInfo/getVerificationMailCode", "anon");
         filterChainDefinitionMap.put("/memberInfo/activity/**", "anon");
         filterChainDefinitionMap.put("/memberInfo/carousel/**", "anon");
+        filterChainDefinitionMap.put("/checkcenter/**", "anon");
+        filterChainDefinitionMap.put("/memberInfo/areaInfo/**", "anon");
+        filterChainDefinitionMap.put("/memberInfo/HomepageDisplayPagination/**", "anon");
+        filterChainDefinitionMap.put("/memberInfo/Latestregisteredmembers/**", "anon");
+        filterChainDefinitionMap.put("/memberInfo/getVerificationCode/**", "anon");
+        filterChainDefinitionMap.put("/memberInfo/registered/**", "anon");
 
 
         // 添加自己的过滤器并且取名为jwt

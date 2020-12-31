@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.io.Serializable;
 
@@ -21,7 +22,7 @@ import java.io.Serializable;
  * @author 陈志浩123
  * @since 2020-12-16
  */
-
+@Data
 @TableName("member_info")
 public class MemberInfo extends Model<MemberInfo> {
 
@@ -64,7 +65,7 @@ public class MemberInfo extends Model<MemberInfo> {
      * 身高
      */
     @TableField("member_height")
-    private Double memberHeight;
+    private String memberHeight;
     /**
      * 0  未婚 1已婚 2离异 3丧偶 
      */
@@ -90,7 +91,7 @@ public class MemberInfo extends Model<MemberInfo> {
      * 联系电话
      */
     @TableField("contact_number")
-    private Integer contactNumber;
+    private String contactNumber;
     /**
      * 邮箱
      */
@@ -187,277 +188,7 @@ public class MemberInfo extends Model<MemberInfo> {
     private Integer sts;
 
 
-    public Integer getMemberId() {
-        return memberId;
-    }
 
-    public void setMemberId(Integer memberId) {
-        this.memberId = memberId;
-    }
-
-    public String getMemberName() {
-        return memberName;
-    }
-
-    public void setMemberName(String memberName) {
-        this.memberName = memberName;
-    }
-
-    public String getMemberGender() {
-        return memberGender;
-    }
-
-    public void setMemberGender(String memberGender) {
-        this.memberGender = memberGender;
-    }
-
-    public Integer getMemberAge() {
-        return memberAge;
-    }
-
-    public void setMemberAge(Integer memberAge) {
-        this.memberAge = memberAge;
-    }
-
-    public String getMemberEducation() {
-        return memberEducation;
-    }
-
-    public void setMemberEducation(String memberEducation) {
-        this.memberEducation = memberEducation;
-    }
-
-    public Double getMemberWeight() {
-        return memberWeight;
-    }
-
-    public void setMemberWeight(Double memberWeight) {
-        this.memberWeight = memberWeight;
-    }
-
-    public Double getMemberHeight() {
-        return memberHeight;
-    }
-
-    public void setMemberHeight(Double memberHeight) {
-        this.memberHeight = memberHeight;
-    }
-
-    public String getMaritalStatus() {
-        return maritalStatus;
-    }
-
-    public void setMaritalStatus(String maritalStatus) {
-        this.maritalStatus = maritalStatus;
-    }
-
-    public String getWechatAuthenticationStatus() {
-        return wechatAuthenticationStatus;
-    }
-
-    public void setWechatAuthenticationStatus(String wechatAuthenticationStatus) {
-        this.wechatAuthenticationStatus = wechatAuthenticationStatus;
-    }
-
-    public String getRealNameAuthenticationStatus() {
-        return realNameAuthenticationStatus;
-    }
-
-    public void setRealNameAuthenticationStatus(String realNameAuthenticationStatus) {
-        this.realNameAuthenticationStatus = realNameAuthenticationStatus;
-    }
-
-    public String getMembershipLevel() {
-        return membershipLevel;
-    }
-
-    public void setMembershipLevel(String membershipLevel) {
-        this.membershipLevel = membershipLevel;
-    }
-
-    public String getOpenid() {
-        return openid;
-    }
-
-    public void setOpenid(String openid) {
-        this.openid = openid;
-    }
-
-    public Integer getContactNumber() {
-        return contactNumber;
-    }
-
-    public void setContactNumber(Integer contactNumber) {
-        this.contactNumber = contactNumber;
-    }
-
-    public String getMailbox() {
-        return mailbox;
-    }
-
-    public void setMailbox(String mailbox) {
-        this.mailbox = mailbox;
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getIdNumber() {
-        return idNumber;
-    }
-
-    public void setIdNumber(String idNumber) {
-        this.idNumber = idNumber;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public String getWeChatNumber() {
-        return weChatNumber;
-    }
-
-    public void setWeChatNumber(String weChatNumber) {
-        this.weChatNumber = weChatNumber;
-    }
-
-    public String getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
-    }
-
-    public String getCurrentCity() {
-        return currentCity;
-    }
-
-    public void setCurrentCity(String currentCity) {
-        this.currentCity = currentCity;
-    }
-
-    public String getCurrentEconomy() {
-        return currentEconomy;
-    }
-
-    public void setCurrentEconomy(String currentEconomy) {
-        this.currentEconomy = currentEconomy;
-    }
-
-    public String getCurrentDimension() {
-        return currentDimension;
-    }
-
-    public void setCurrentDimension(String currentDimension) {
-        this.currentDimension = currentDimension;
-    }
-
-    public String getOnline() {
-        return online;
-    }
-
-    public void setOnline(String online) {
-        this.online = online;
-    }
-
-    public String getWhetherUploadPictures() {
-        return whetherUploadPictures;
-    }
-
-    public void setWhetherUploadPictures(String whetherUploadPictures) {
-        this.whetherUploadPictures = whetherUploadPictures;
-    }
-
-    public String getMemberSource() {
-        return memberSource;
-    }
-
-    public void setMemberSource(String memberSource) {
-        this.memberSource = memberSource;
-    }
-
-    public String getConstellation() {
-        return constellation;
-    }
-
-    public void setConstellation(String constellation) {
-        this.constellation = constellation;
-    }
-
-    public String getAccountStatus() {
-        return accountStatus;
-    }
-
-    public void setAccountStatus(String accountStatus) {
-        this.accountStatus = accountStatus;
-    }
-
-    public Date getLastLoginTime() {
-        return lastLoginTime;
-    }
-
-    public void setLastLoginTime(Date lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
-    }
-
-    public Date getRegistrationTime() {
-        return registrationTime;
-    }
-
-    public void setRegistrationTime(Date registrationTime) {
-        this.registrationTime = registrationTime;
-    }
-
-    public Integer getSts() {
-        return sts;
-    }
-
-    public void setSts(Integer sts) {
-        this.sts = sts;
-    }
 
     @Override
     protected Serializable pkVal() {
