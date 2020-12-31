@@ -30,4 +30,6 @@ public interface MemberInfoService extends IService<MemberInfo> {
     List<MemberInfoDTO> Latestregisteredmembers();
 
     List<MemberInfo> MenuPagination(MemberInfo memberInfo);
+
+    String coderegistered(String account, String code);
 }

@@ -4,6 +4,7 @@ package com.example.shop.management.controller;
 
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+
 import com.example.shop.base.SessionVehicle;
 import com.example.shop.base.json.ApiUtil;
 import com.example.shop.base.json.RC;
@@ -101,7 +102,7 @@ public class MemberInfoController {
     @ApiOperation(value = "获取图形验证码", notes = "获取图形验证码")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "string" ),
-           })
+    })
     @RequestMapping(value = "index",method = RequestMethod.GET)
     public String test(HttpServletRequest request, Model model) throws IOException {
         return "index.html";
@@ -143,7 +144,7 @@ public class MemberInfoController {
     @ApiOperation(value = "获取图形验证码", notes = "获取图形验证码")
     @GetMapping
     @ApiImplicitParams({
-           // @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "string" ),
+            // @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "string" ),
     })
     @RequestMapping(value = "checkcapcode" ,method = RequestMethod.POST)
     public @ResponseBody Map < String, Object > checkcapcode(@RequestParam("xpos") int xpos,
@@ -188,7 +189,7 @@ public class MemberInfoController {
             @ApiImplicitParam(name = "birthday", value = "生日", paramType = "query", required = true, dataType = "Date" ),
             @ApiImplicitParam(name = "constellation", value = "星座", paramType = "query", required = true, dataType = "string" ),
             @ApiImplicitParam(name = "memberHeight", value = "身高", paramType = "query", required = true, dataType = "string" )
-         })
+    })
 
     @RequestMapping(value =  "/perfectInformation",method = RequestMethod.POST )
     @ResponseBody
@@ -247,11 +248,25 @@ public class MemberInfoController {
         MemberInfo memberInfo=new MemberInfo();
         memberInfo.setPassword(password);
         memberInfo.setAccount(account);
-        LoginUser loginUser = memberInfoService.login(memberInfo);
-
-
+        Map<String, Object> map = new HashMap<>();
+        map.put("account", account);
+        map.put("password", password);
+        //throw  new MyException("我的模拟业务代码的异常!");
+        MemberInfo user1 = null;
+        try {
+            user1 = memberInfoService.selectByMap(map).get(0);
+            user1.setLastLoginTime(new Date());
+            memberInfoService.updateById(user1);
+        } catch (Exception e) {
+            //throw new MyException("100002","empty","/API/getUserName","登录失败,用户密码错误");
+            return Result.Result("100002","登录失败,用户密码错误");
+        }
+        LoginUser loginUser = memberInfoService.login(user1);
+        Map<String,String>map2=new HashMap<>();
+        map2.put("token",loginUser.getToken());
+        map2.put("username",user1.getMemberName());
         if (loginUser != null) {
-            return Result.Result("00000","登录成功",loginUser.getToken());
+            return Result.Result("00000","登录成功",map2);
         }
         return Result.Result("100002","登录失败");
     }
@@ -274,14 +289,14 @@ public class MemberInfoController {
     @ResponseBody
     public String UploadCurrentLocation(@RequestParam(name = "currentEconomy") String currentEconomy,@RequestParam(name = "currentDimension") String currentDimension) {
         String memberId = SessionVehicle.get(SessionVehicle.MEMBER_ID);
-       // log.warn("执行登录操作!");
+        // log.warn("执行登录操作!");
         //先执行登录验证的过滤操作,才会执行后面这些乱七八糟的异常
         //throw new MyException("测试自定义异常!");
         MemberInfo memberInfo=new MemberInfo();
         memberInfo.setMemberId(Integer.valueOf(memberId));
         memberInfo.setCurrentEconomy(currentEconomy);
         memberInfo.setConstellation(currentDimension);
-       boolean fig=memberInfoService.updateById(memberInfo);
+        boolean fig=memberInfoService.updateById(memberInfo);
 
 
         if (fig) {
@@ -294,7 +309,7 @@ public class MemberInfoController {
      */
     @ApiOperation(value = "首页展示的会员列表", notes = "首页展示的会员类表")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true)
+//            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true)
     })
     @RequestMapping(value =  "/HomepageDisplayPagination",method = RequestMethod.POST )
     @ResponseBody
@@ -311,7 +326,7 @@ public class MemberInfoController {
      */
     @ApiOperation(value = "最新注册会员", notes = "最新注册会员")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true)
+//            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true)
     })
     @RequestMapping(value =  "Latestregisteredmembers",method = RequestMethod.POST )
     @ResponseBody
@@ -352,6 +367,25 @@ public class MemberInfoController {
             return Result.Result("00000","获取验证码成功");
         }
         return Result.Result(RC.REGIST_PARAM_TYPE_INVALID);
+    }
+
+
+    /**
+     * 短信验证码登录
+     */
+    @ApiOperation(value = "短信验证码登录", notes = "短信验证码登录")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "account", value = "手机号", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "code", value = "验证码", paramType = "query", required = true, dataType = "string" )})
+
+
+    @RequestMapping(value = "coderegistered", method = RequestMethod.POST)
+    @ResponseBody
+    public String coderegistered(@RequestParam(name = "account") String account,@RequestParam(name = "code") String code) {
+
+
+
+        return memberInfoService.coderegistered(account,code);
     }
 }
 

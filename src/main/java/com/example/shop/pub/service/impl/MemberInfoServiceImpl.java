@@ -1,5 +1,6 @@
 package com.example.shop.pub.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.example.shop.base.json.ApiUtil;
 import com.example.shop.base.json.RC;
 import com.example.shop.base.json.Result;
@@ -8,6 +9,7 @@ import com.example.shop.management.bean.DTO.MemberInfoDTO;
 import com.example.shop.management.bean.LoginUser;
 import com.example.shop.management.bean.MemberInfo;
 import com.example.shop.pub.mapper.MemberInfoMapper;
+import com.example.shop.pub.service.IMailService;
 import com.example.shop.pub.service.MemberInfoService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.example.shop.pub.Utils.RedisUtils;
@@ -36,6 +38,8 @@ public class MemberInfoServiceImpl extends ServiceImpl<MemberInfoMapper, MemberI
     private  RedisUtils redisUtils;
     @Autowired
     private   MemberInfoMapper memberInfoMapper;
+    @Autowired
+    private IMailService iMailService;
     @Override
     public String registered(String account, String password,String code) {
         String codes=(String)redisUtils.get(account);
@@ -49,7 +53,12 @@ public class MemberInfoServiceImpl extends ServiceImpl<MemberInfoMapper, MemberI
                 memberInfo.setRegistrationTime(new Date());
                 memberInfoMapper.insert(memberInfo);
 
-                return Result.Result(RC.SUCCESS);
+                memberInfo.setAccount(account);
+                memberInfo=memberInfoMapper.selectOne(memberInfo);
+                String token = JwtUtil.sign(account, password);
+                redisUtils.set(token,memberInfo,3600L);
+
+                return Result.Result(RC.SUCCESS,token);
             }else{
                 return Result.Result(RC.REGIST_PARAM_SMSCODE_INVALID);
             }
@@ -64,7 +73,8 @@ public class MemberInfoServiceImpl extends ServiceImpl<MemberInfoMapper, MemberI
         MemberInfo memberInfo=new MemberInfo();
         memberInfo.setAccount(account);
 
-           log.info("验证犸是   "+code);
+        log.info("验证犸是   "+code);
+        iMailService.sendSimpleMail("1962797941@qq.com","验证码","注册验证码是"+code+"，请不要告诉其他人");
 //        SendSmsResponse result=SmsUtil.sendCheckcode(account,code);
 //        if (!StringUtils.equals("OK", result.getCode())) {
 //            log.error("发送短信验证码出错：" + result.getCode() + ", " + result.getMessage());
@@ -85,23 +95,12 @@ public class MemberInfoServiceImpl extends ServiceImpl<MemberInfoMapper, MemberI
 
     @Override
     public LoginUser login(MemberInfo user) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("account", user.getAccount());
-        map.put("password", user.getPassword());
-        //throw  new MyException("我的模拟业务代码的异常!");
-        MemberInfo user1 = null;
-        try {
-            user1 = memberInfoMapper.selectByMap(map).get(0);
-            user1.setLastLoginTime(new Date());
-            memberInfoMapper.updateById(user1);
-        } catch (Exception e) {
-           // throw new MyException("该用户名或者密码错误,请检查后再登录!");
-        }
+
         LoginUser loginUser=new LoginUser();
-        loginUser.setUser(user1);
+        loginUser.setUser(user);
         //根据电话号码和密码加密生成token
-        String token = JwtUtil.sign(user1.getAccount(), user1.getPassword());
-        redisUtils.set(token,user1,3600L);
+        String token = JwtUtil.sign(user.getAccount(), user.getPassword());
+        redisUtils.set(token,user,3600L);
         loginUser.setToken(token);
         return loginUser;
     }
@@ -120,5 +119,30 @@ public class MemberInfoServiceImpl extends ServiceImpl<MemberInfoMapper, MemberI
     @Override
     public List<MemberInfo> MenuPagination(MemberInfo memberInfo) {
         return memberInfoMapper.getmemberInfopage(memberInfo);
+    }
+
+    @Override
+    public String coderegistered(String account, String code) {
+        String codes=(String)redisUtils.get(account);
+        if(codes==null){
+            return Result.Result(RC.REGIST_PARAM_SMSCODE_INVALID);
+        }else{
+            if(code.equals(code)){
+                int fig=memberInfoMapper.selectCount(new EntityWrapper<MemberInfo>().eq("account",account));
+                if(fig==0){
+                    MemberInfo memberInfo=new MemberInfo();
+                    memberInfo.setPassword("123456");
+                    memberInfo.setAccount(account);
+                    memberInfo.setRegistrationTime(new Date());
+                    memberInfoMapper.insert(memberInfo);
+                }
+                MemberInfo memberInfo=memberInfoMapper.selectById(new EntityWrapper<MemberInfo>().eq("account",account));
+                String token = JwtUtil.sign(account,memberInfo.getPassword());
+                redisUtils.set(token,memberInfo,3600L);
+                return Result.Result(RC.SUCCESS,token);
+            }else{
+                return Result.Result(RC.REGIST_PARAM_SMSCODE_INVALID);
+            }
+        }
     }
 }

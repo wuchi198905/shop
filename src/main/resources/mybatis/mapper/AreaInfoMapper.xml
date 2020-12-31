@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.shop.pub.mapper.AreaInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.shop.pub.bean.AreaInfo">
+        <id column="area_code" property="areaCode" />
+        <result column="parent_code" property="parentCode" />
+        <result column="area_name" property="areaName" />
+        <result column="area_level" property="areaLevel" />
+        <result column="amap_code" property="amapCode" />
+        <result column="longitude" property="longitude" />
+        <result column="latitude" property="latitude" />
+        <result column="radii" property="radii" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        area_code AS areaCode, parent_code AS parentCode, area_name AS areaName, area_level AS areaLevel, amap_code AS amapCode, longitude, latitude, radii
+    </sql>
+
+</mapper>
