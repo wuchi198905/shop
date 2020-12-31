@@ -42,7 +42,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter implements Filter {
     @PostConstruct
     public void init() {
         commonUtil = this;
-        System.err.println("测试一下***********");
+        log.debug("加载JwtFilter***********");
     }
 
     /**
@@ -69,7 +69,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter implements Filter {
             log.info("当前请求的接口"+pathString);
             String [] pathStrings=pathString.split("/");
             if(pathStrings[1].equals("memberInfo")){
-                log.info(strDirPath);
+                //log.info(strDirPath);
                 getSubject(request, response).login(jwtToken);
                 MemberInfo memberInfoMVO = (MemberInfo) commonUtil.redisUtils.get(token);
                 SessionVehicle.reflesh(memberInfoMVO);

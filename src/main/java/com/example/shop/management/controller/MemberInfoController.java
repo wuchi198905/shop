@@ -287,7 +287,7 @@ public class MemberInfoController {
 
     @ApiOperation(value = "上传会员登录时的最新位置", notes = "上传会员登录时的最新位置")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true),
+
             @ApiImplicitParam(name = "currentEconomy", value = "经度", paramType = "query", required = true, dataType = "string"),
 
             @ApiImplicitParam(name = "currentDimension", value = "纬度", paramType = "query", required = true, dataType = "string")
@@ -411,6 +411,21 @@ public class MemberInfoController {
         if (mun > 0) {
             return Result.Result(RC.REGIST_PARAM_MOBILE_OCCUPIED);
         }
+        return Result.Result(RC.SUCCESS);
+    }
+    /**
+     * 查询用户名是否存在
+     */
+    @ApiOperation(value = "退出登录", notes = "退出登录")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true),
+
+    })
+
+    @RequestMapping(value = "loginOut", method = RequestMethod.POST)
+    @ResponseBody
+    public String loginOut(String userName) {
+
         return Result.Result(RC.SUCCESS);
     }
 }
