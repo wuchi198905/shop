@@ -41,7 +41,7 @@ public class MemberInfoServiceImpl extends ServiceImpl<MemberInfoMapper, MemberI
     @Autowired
     private IMailService iMailService;
     @Override
-    public String registered(String account, String password,String code) {
+    public String registered(String account,String userName, String password,String code) {
         String codes=(String)redisUtils.get(account);
         if(codes==null){
             return Result.Result(RC.REGIST_PARAM_SMSCODE_INVALID);
@@ -51,6 +51,7 @@ public class MemberInfoServiceImpl extends ServiceImpl<MemberInfoMapper, MemberI
                 memberInfo.setPassword(password);
                 memberInfo.setAccount(account);
                 memberInfo.setRegistrationTime(new Date());
+                memberInfo.setUserName(userName);
                 memberInfoMapper.insert(memberInfo);
 
                 memberInfo.setAccount(account);

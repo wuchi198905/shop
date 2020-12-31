@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface MemberInfoService extends IService<MemberInfo> {
 
-    String registered(String account, String password,String code);
+    String registered(String account,String userName, String password,String code);
 
     boolean getVerificationCode(String account);
 

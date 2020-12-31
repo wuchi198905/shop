@@ -66,6 +66,7 @@ public class Shiro {
         filterChainDefinitionMap.put("/memberInfo/Latestregisteredmembers/**", "anon");
         filterChainDefinitionMap.put("/memberInfo/getVerificationCode/**", "anon");
         filterChainDefinitionMap.put("/memberInfo/registered/**", "anon");
+        filterChainDefinitionMap.put("/memberInfo/qeeruserName/**", "anon");
 
 
         // 添加自己的过滤器并且取名为jwt

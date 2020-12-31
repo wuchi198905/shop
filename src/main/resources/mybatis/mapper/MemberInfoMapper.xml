@@ -37,12 +37,13 @@
         <result column="account_status" property="accountStatus" />
         <result column="last_login_time" property="lastLoginTime" />
         <result column="registration_time" property="registrationTime" />
+        <result column="user_name" property="userName" />
         <result column="sts" property="sts" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        member_id AS memberId, member_name AS memberName, member_gender AS memberGender, member_age AS memberAge, member_education AS memberEducation, member_weight AS memberWeight, member_height AS memberHeight, marital_status AS maritalStatus, WeChat_authentication_status AS wechatAuthenticationStatus, real_name_authentication_status AS realNameAuthenticationStatus, membership_level AS membershipLevel, openid, contact_number AS contactNumber, mailbox, province, city, area, address, password, id_number AS idNumber, account, we_chat_number AS weChatNumber, birthday, current_city AS currentCity, current_economy AS currentEconomy, current_dimension AS currentDimension, online, whether_upload_pictures AS whetherUploadPictures, member_source AS memberSource, constellation, account_status AS accountStatus, last_login_time AS lastLoginTime, registration_time AS registrationTime, sts
+        member_id AS memberId,user_name as userName,member_name AS memberName, member_gender AS memberGender, member_age AS memberAge, member_education AS memberEducation, member_weight AS memberWeight, member_height AS memberHeight, marital_status AS maritalStatus, WeChat_authentication_status AS wechatAuthenticationStatus, real_name_authentication_status AS realNameAuthenticationStatus, membership_level AS membershipLevel, openid, contact_number AS contactNumber, mailbox, province, city, area, address, password, id_number AS idNumber, account, we_chat_number AS weChatNumber, birthday, current_city AS currentCity, current_economy AS currentEconomy, current_dimension AS currentDimension, online, whether_upload_pictures AS whetherUploadPictures, member_source AS memberSource, constellation, account_status AS accountStatus, last_login_time AS lastLoginTime, registration_time AS registrationTime, sts
     </sql>
 <!--    查询会员头像年龄-->
     <select id="HomepageDisplayPagination" resultType="com.example.shop.management.bean.DTO.MemberInfoDTO" parameterType="com.example.shop.management.bean.DTO.MemberInfoDTO">

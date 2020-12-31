@@ -34,6 +34,10 @@ public class MemberInfo extends Model<MemberInfo> {
     @TableId(value = "member_id", type = IdType.AUTO)
     private Integer memberId;
     /**
+     * 用户名  显示用并非登录
+     */
+    public   String userName;
+    /**
      * 姓名
      */
 
