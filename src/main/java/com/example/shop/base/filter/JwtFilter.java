@@ -66,7 +66,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter implements Filter {
 
 
             String strDirPath = request.getServletContext().getRealPath("/");
-            log.info("当前请求的接口"+strDirPath);
+            log.info("当前请求的接口"+pathString);
             String [] pathStrings=pathString.split("/");
             if(pathStrings[1].equals("memberInfo")){
                 log.info(strDirPath);
