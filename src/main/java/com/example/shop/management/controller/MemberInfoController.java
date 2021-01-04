@@ -8,10 +8,12 @@ import com.example.shop.base.json.ApiUtil;
 import com.example.shop.base.json.RC;
 import com.example.shop.base.json.Result;
 import com.example.shop.management.bean.DTO.MemberInfoDTO;
+import com.example.shop.management.bean.Image;
 import com.example.shop.management.bean.LoginUser;
 import com.example.shop.management.bean.MemberInfo;
 import com.example.shop.pub.Utils.RedisUtils;
 import com.example.shop.pub.service.IMailService;
+import com.example.shop.pub.service.ImageService;
 import com.example.shop.pub.service.MemberInfoService;
 import com.example.shop.pub.Utils.IDUtils;
 import com.example.shop.pub.Utils.VerifyImageUtil;
@@ -52,6 +54,8 @@ public class MemberInfoController {
     private IMailService iMailService;
     @Autowired
     private RedisUtils redisUtils;
+    @Autowired
+    private ImageService imageService;
 
     /**
      * 注册会员
@@ -249,8 +253,7 @@ public class MemberInfoController {
     @ResponseBody
     public String login(@RequestParam(name = "account") String account, @RequestParam(name = "password") String password) {
         log.warn("执行登录操作!");
-        //先执行登录验证的过滤操作,才会执行后面这些乱七八糟的异常
-        //throw new MyException("测试自定义异常!");
+        String memberId = SessionVehicle.get(SessionVehicle.MEMBER_ID);
         MemberInfo memberInfo = new MemberInfo();
         memberInfo.setPassword(password);
         memberInfo.setAccount(account);
@@ -267,11 +270,19 @@ public class MemberInfoController {
             //throw new MyException("100002","empty","/API/getUserName","登录失败,用户密码错误");
             return Result.Result("100002", "登录失败,用户密码错误");
         }
+
+
         LoginUser loginUser = memberInfoService.login(user1);
         Map<String, String> map2 = new HashMap<>();
         map2.put("token", loginUser.getToken());
         map2.put("username", user1.getUserName());
         map2.put("Status", user1.getRealNameAuthenticationStatus());
+        map2.put("whetherUploadPictures", user1.getWhetherUploadPictures());
+        if(user1.getWhetherUploadPictures().equals("1")){
+            Image mun = imageService.selectOne(new EntityWrapper<Image>().eq("member_id", user1.getMemberId()).eq("type","A"));
+            map2.put("imagestatus", mun.getStatus());
+        }
+
         if (loginUser != null) {
             return Result.Result("00000", "登录成功", map2);
         }

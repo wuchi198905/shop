@@ -7,10 +7,12 @@ import com.example.shop.base.connt.DataFileUtil;
 import com.example.shop.base.json.RC;
 import com.example.shop.base.json.Result;
 import com.example.shop.management.bean.Image;
+import com.example.shop.management.bean.MemberInfo;
 import com.example.shop.pub.Utils.ImageType;
 import com.example.shop.pub.bean.AttachFile;
 import com.example.shop.pub.service.AttachFileService;
 import com.example.shop.pub.service.ImageService;
+import com.example.shop.pub.service.MemberInfoService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +40,8 @@ public class ImageController {
     private ImageService imageService;
     @Autowired
     private AttachFileService attachFileService;
+    @Autowired
+    private MemberInfoService memberInfoService;
 
     @ApiOperation(value = "添加个人图片", notes = "添加个人图片", httpMethod = "POST")
     @ApiImplicitParams({
@@ -60,6 +64,10 @@ public class ImageController {
         image.setStatus("0");
         image.setCreationTime(new Date());
         imageService.insert(image);
+        MemberInfo memberInfo = new MemberInfo();
+        memberInfo.setWhetherUploadPictures("1");
+        memberInfo.setMemberId(Integer.valueOf(VHEICLEiD));
+        memberInfoService.updateById(memberInfo);
         // 转存文件到指定的路径
         return Result.Result(RC.SUCCESS);
 
