@@ -281,7 +281,10 @@ public class MemberInfoController {
         if(user1.getWhetherUploadPictures().equals("1")){
             Image mun = imageService.selectOne(new EntityWrapper<Image>().eq("member_id", user1.getMemberId()).eq("type","A"));
             map2.put("imagestatus", mun.getStatus());
+            map2.put("imageId", mun.getImageId().toString());
+            map2.put("path", mun.getPath());
         }
+        log.info(map2.get("whetherUploadPictures"));
 
         if (loginUser != null) {
             return Result.Result("00000", "登录成功", map2);

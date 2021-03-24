@@ -45,9 +45,9 @@ public class FuncListController {
     })
     @ResponseBody
     @RequestMapping(path = "/MenuPagination", method = {RequestMethod.POST})
-    public String MenuPagination(FuncList funcList,@PathVariable("pageNum") int pageNum) {
+    public String MenuPagination(FuncList funcList,@PathVariable("pageNum") String pageNum) {
 
-        PageHelper.startPage(pageNum,10);
+        PageHelper.startPage(Integer.valueOf(pageNum),10);
         List<FuncListDTO> users=funcListService.MenuPagination(funcList);
         PageInfo<FuncListDTO> pageInfo = new PageInfo<FuncListDTO>(users);
         return pageInfo.toString();

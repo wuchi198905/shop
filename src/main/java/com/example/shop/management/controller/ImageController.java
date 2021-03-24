@@ -75,6 +75,32 @@ public class ImageController {
     }
 
 
+    @ApiOperation(value = "修改个人图片", notes = "修改个人图片", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true),
+            @ApiImplicitParam(name = "fileId", value = "上传图片后获取的fileId", paramType = "query", required = true, dataType = "string"),
+            @ApiImplicitParam(name = "imageId", value = "图片主键", paramType = "query", required = true, dataType = "string")
+    })
+    @RequestMapping(path = "/updatephoto", method = {RequestMethod.POST})
+    public String updatephoto(Integer imageId,String fileId) throws Exception {
+        String VHEICLEiD = SessionVehicle.get(SessionVehicle.MEMBER_ID);
+        Image image = new Image();
+
+        image.setImageId(imageId);
+        AttachFile file1 = attachFileService.selectOne(new EntityWrapper<AttachFile>().eq("file_id", fileId));
+        image.setPath(file1.getSaveName());
+        image.setStatus("0");
+        imageService.updateById(image);
+        MemberInfo memberInfo = new MemberInfo();
+        memberInfo.setWhetherUploadPictures("1");
+        memberInfo.setMemberId(Integer.valueOf(VHEICLEiD));
+        memberInfoService.updateById(memberInfo);
+        // 转存文件到指定的路径
+        return Result.Result(RC.SUCCESS);
+
+
+    }
+
     /**
      * 设置头衔接口
      */

@@ -41,9 +41,9 @@ public class MemberInfoSystemController {
     })
     @ResponseBody
     @RequestMapping(path = "/memberInfoPagination", method = {RequestMethod.POST})
-    public String MenuPagination(MemberInfo memberInfo, int pageNum) {
+    public String MenuPagination(MemberInfo memberInfo, @RequestParam(name = "pageNum")String pageNum) {
 
-        PageHelper.startPage(pageNum,10);
+        PageHelper.startPage(Integer.valueOf(pageNum),10);
         List<MemberInfo> users=memberInfoService.MenuPagination(memberInfo);
         PageInfo<MemberInfo> pageInfo = new PageInfo<MemberInfo>(users);
         return  Result.Result(RC.SUCCESS,pageInfo);

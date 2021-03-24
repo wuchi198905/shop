@@ -112,6 +112,7 @@ public class MemberInfoServiceImpl extends ServiceImpl<MemberInfoMapper, MemberI
     @Override
     public List<MemberInfoDTO> HomepageDisplayPagination() {
         MemberInfoDTO memberInfoDTO=new MemberInfoDTO();
+        memberInfoDTO.setStatus("1");
         return memberInfoMapper.HomepageDisplayPagination(memberInfoDTO);
     }
 

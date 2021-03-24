@@ -65,6 +65,10 @@
             <if test="memberGender!=null and memberGender!='' ">
                 and a.member_gender =#{memberGender}
             </if>
+
+            <if test="status!=null and status!='' ">
+                and b.status =#{status}
+            </if>
             LIMIT 0,5
         </where>
     </select>
@@ -79,10 +83,10 @@
         <where>
             1=1
 <!--            <if test="maxAge!=null">-->
-<!--                and member_age &lt;=#{memberAge}-->
+<!--                and a.member_age &lt;=#{memberAge}-->
 <!--            </if>-->
 <!--            <if test="maxAge!=null">-->
-<!--                and member_age &gt;=#{miniAge}-->
+<!--                and a.member_age &gt;=#{miniAge}-->
 <!--            </if>-->
             <if test="province!=null and province!='' ">
                 and province=#{province}
@@ -93,9 +97,7 @@
             <if test="memberGender!=null and memberGender!='' ">
                 and member_gender =#{memberGender}
             </if>
-            <if test="memberGender!=null and memberGender!='' ">
-                and member_gender =#{memberGender}
-            </if>
+
         </where>
         ORDER BY registration_time
     </select>

@@ -32,7 +32,12 @@
             <if test="memberName!=null and memberName!='' ">
                 AND b.member_name=#{memberName}
             </if>
+            <if test="type!=null and type!='' ">
+                AND a.type=#{type}
+            </if>
+            ORDER BY a.creation_time DESC
         </where>
+
     </select>
 
 </mapper>

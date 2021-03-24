@@ -34,12 +34,12 @@ public class ImageSystemController {
     })
     @ResponseBody
     @RequestMapping(path = "/imagePagination", method = {RequestMethod.POST})
-    public String imagePagination(ImageDTO images, @PathVariable("pageNum") int pageNum) {
+    public String imagePagination(ImageDTO images, String pageNum) {
 
-        PageHelper.startPage(pageNum,10);
+        PageHelper.startPage(Integer.valueOf(pageNum),10);
         List<ImageDTO> list=imageService.imagePagination(images);
         PageInfo<ImageDTO> pageInfo = new PageInfo<ImageDTO>(list);
-        return pageInfo.toString();
+        return Result.Result(RC.SUCCESS,pageInfo);
     }
     @ApiOperation(value = "会员图片审核", notes = "会员图片列表分页")
     @ApiImplicitParams({

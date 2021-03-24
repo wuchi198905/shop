@@ -99,9 +99,9 @@ public class CarouselSystemController {
     @RequestMapping(path = "/getecarouselpage", method = {RequestMethod.POST})
     public String getecarouselpage(Carousel carousel,int  pageNum,int connt) {
 
-        Page<Carousel>page=new Page<>(connt,pageNum);
-        Page page1=carouselService.selectMapsPage(page,new EntityWrapper<Carousel>().eq("type",carousel.getType()));
-
+        Page<Carousel>page=new Page<>(pageNum,connt);
+        Page page1=carouselService.selectMapsPage(page,null);
+//new EntityWrapper<Carousel>().eq("type",carousel.getType()
         return Result.Result(RC.SUCCESS,page1);
     }
 
@@ -134,6 +134,26 @@ public class CarouselSystemController {
         } catch (Exception e) {
             return Result.Result("40001","上传文件出错", e);
         }
+    }
+    @ApiOperation(value = "删除轮播图", notes = "删除轮播图")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "carouselId", value = "主键", paramType = "query", required = true, dataType = "string" ),
+//            @ApiImplicitParam(name = "jumpLink", value = "图片跳转的网页链接", paramType = "query", required = true, dataType = "string" ),
+//            @ApiImplicitParam(name = "jumpedText", value = "图片跳转文本内容", paramType = "query", required = true, dataType = "string" ),
+//            @ApiImplicitParam(name = "order", value = "顺序", paramType = "query", required = true, dataType = "string" ),
+//            @ApiImplicitParam(name = "type", value = "类型  A网页 ，B文本", paramType = "query", required = true, dataType = "string" ),
+//            @ApiImplicitParam(name = "pageNum", value = "当前多少页", paramType = "query", required = true, dataType = "string" ),
+//            @ApiImplicitParam(name = "connt", value = "当前页数量", paramType = "query", required = true, dataType = "string" ),
+    })
+    @ResponseBody
+    @RequestMapping(path = "/delectcarousel", method = {RequestMethod.POST})
+    public String delectcarousel(Carousel carousel) {
+        carouselService.deleteById(carousel);
+//        carousel.setSts(0);
+//        carousel.setPath(file1.getSaveName());
+//        carouselService.updateById(carousel);
+        return Result.Result(RC.SUCCESS);
     }
 }
 
