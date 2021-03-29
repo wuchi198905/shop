@@ -10,11 +10,13 @@ import com.example.shop.management.bean.Activity;
 import com.example.shop.management.bean.MemberInfo;
 import com.example.shop.pub.bean.AttachFile;
 import com.example.shop.pub.service.ActivityService;
+import com.example.shop.pub.service.AttachFileService;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +37,8 @@ import java.util.List;
 public class ActivitySystemController {
     @Autowired
     private ActivityService activityService;
+    @Autowired
+    private AttachFileService attachFileService;
     @ApiOperation(value = "添加活动", notes = "添加活动")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "string" ),
@@ -43,13 +47,18 @@ public class ActivitySystemController {
             @ApiImplicitParam(name = "type", value = "活动类型 0：免费活动  1 相亲", paramType = "query", required = true, dataType = "string" ),
             @ApiImplicitParam(name = "activityArea", value = "活动地区", paramType = "query", required = true, dataType = "string" ),
             @ApiImplicitParam(name = "activeStatus", value = "活动状态  0 未开始  1 开始报名  2  报名截止  3 活动结束", paramType = "query", required = true, dataType = "string" ),
-            @ApiImplicitParam(name = "activities", value = "活动内容   富文本格式", paramType = "query", required = true, dataType = "string" )
+            @ApiImplicitParam(name = "activities", value = "活动内容   富文本格式", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "title", value = "标题", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "eventDeadline", value = "活动截止", paramType = "query", required = true, dataType = "string" ),
+//            @ApiImplicitParam(name = "fileId", value = "上传图片接口返回的值", paramType = "query", required = true, dataType = "string" ),
     })
     @ResponseBody
     @RequestMapping(path = "/addActivity", method = {RequestMethod.POST})
     public String MenuPagination(Activity activity) {
-                activity.setSts(0);
-                activity.setCreationTime(new Date());
+              // AttachFile file1 = attachFileService.selectOne(new EntityWrapper<AttachFile>().eq("file_id", fileId));
+//                activity.setSts(0);
+//                activity.setCreationTime(new Date());
+//                activity.setPath(file1.getSaveName());
                 activityService.insert(activity);
 
         return Result.Result(RC.SUCCESS);
@@ -64,7 +73,10 @@ public class ActivitySystemController {
             @ApiImplicitParam(name = "activityArea", value = "活动地区", paramType = "query", required = true, dataType = "string" ),
             @ApiImplicitParam(name = "activeStatus", value = "活动状态  0 未开始  1 开始报名  2  报名截止  3 活动结束", paramType = "query", required = true, dataType = "string" ),
             @ApiImplicitParam(name = "activities", value = "活动内容   富文本格式", paramType = "query", required = true, dataType = "string" ),
-            @ApiImplicitParam(name = "activityId", value = "主键", paramType = "query", required = true, dataType = "string" )
+            @ApiImplicitParam(name = "activityId", value = "主键", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "title", value = "标题", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "eventDeadline", value = "活动截止时间", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "path", value = "上传图片接口返回的值,不修改不上传", paramType = "query", required = true, dataType = "string" ),
     })
     @ResponseBody
     @RequestMapping(path = "/upDateActivity", method = {RequestMethod.POST})
@@ -104,11 +116,32 @@ public class ActivitySystemController {
     @RequestMapping(path = "/querdImagePage", method = {RequestMethod.POST})
     public String querdImagePage(int connt,int pageNum,String type) {
         try {
-            Page<Activity> page=new Page<>(connt,pageNum);
-            Page page1=activityService.selectMapsPage(page,new EntityWrapper<Activity>().eq("type",type).eq("sts","0"));
+            Page<Activity> page=new Page<>(pageNum,connt);
+            Page page1=activityService.selectMapsPage(page,new EntityWrapper<Activity>().eq("sts","0"));
 
 
             return Result.Result(RC.SUCCESS, page1);
+        } catch (Exception e) {
+            return Result.Result(RC.system_erry);
+        }
+    }
+    @ApiOperation(value = "查看活动详情", notes = "查看活动详情")
+    @ApiImplicitParams({
+
+            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "string"),
+            @ApiImplicitParam(name = "activityId", value = "主键", paramType = "query", required = true, dataType = "string" ),
+
+
+    })
+    @ResponseBody
+    @RequestMapping(path = "/querdImageone", method = {RequestMethod.POST})
+    public String querdImagePage(Activity activity) {
+        try {
+
+            activity=activityService.selectById(activity);
+
+
+            return Result.Result(RC.SUCCESS, activity);
         } catch (Exception e) {
             return Result.Result(RC.system_erry);
         }

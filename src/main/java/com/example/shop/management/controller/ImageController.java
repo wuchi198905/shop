@@ -14,6 +14,7 @@ import com.example.shop.pub.service.AttachFileService;
 import com.example.shop.pub.service.ImageService;
 import com.example.shop.pub.service.MemberInfoService;
 import io.swagger.annotations.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -32,6 +35,7 @@ import java.util.List;
  * @author 陈志浩123
  * @since 2020-12-16
  */
+@Slf4j
 @Api(description = "个人照片的管理接口")
 @RestController
 @RequestMapping("/memberInfo/image")
@@ -143,7 +147,39 @@ public class ImageController {
         return Result.Result(RC.SUCCESS, image);
     }
 
+    /**
+     * 查询我的图片
+     */
 
+    @ApiOperation(value = "查询我的照片状态", notes = "查询我的照片状态")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true),
+
+    })
+    @RequestMapping(value = "QueryMyphotosStatus", method = RequestMethod.POST)
+    @ResponseBody
+    public String QueryMyphotosStatus() {
+        String memberId = SessionVehicle.get(SessionVehicle.MEMBER_ID);
+        MemberInfo memberInfo = new MemberInfo();
+        memberInfo.setMemberId(Integer.valueOf(memberId));
+        memberInfo= memberInfoService.selectById(memberInfo);
+        Map<String, String> map2 = new HashMap<>();
+
+        map2.put("Status", memberInfo.getRealNameAuthenticationStatus());
+        map2.put("whetherUploadPictures", memberInfo.getWhetherUploadPictures());
+        if(memberInfo.getWhetherUploadPictures().equals("1")){
+            Image mun = imageService.selectOne(new EntityWrapper<Image>().eq("member_id", memberInfo.getMemberId()).eq("type","A"));
+            map2.put("imagestatus", mun.getStatus());
+            map2.put("imageId", mun.getImageId().toString());
+            map2.put("path", mun.getPath());
+        }
+        log.info(map2.get("whetherUploadPictures"));
+
+        if (memberInfo != null) {
+            return Result.Result("00000", "成功", map2);
+        }
+        return Result.Result("100002", "登录失败");
+    }
     /**
      * 上传文件
      *
@@ -174,4 +210,6 @@ public class ImageController {
             return Result.Result("40001", "上传文件出错", e);
         }
     }
+
+
 }

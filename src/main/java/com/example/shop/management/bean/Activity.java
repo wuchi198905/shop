@@ -29,12 +29,12 @@ public class Activity extends Model<Activity> {
      * 开始时间
      */
     @TableField("starting_time")
-    private Date startingTime;
+    private String startingTime;
     /**
      * 活动截止时间
      */
     @TableField("end_time")
-    private Date endTime;
+    private String endTime;
     /**
      * h活动类型 0：免费活动  1 相亲
      */
@@ -61,7 +61,57 @@ public class Activity extends Model<Activity> {
      * 0正常 1删除
      */
     private Integer sts;
+    /**
+     * 结束日期
+     */
+    @TableField("event_deadline")
+    private String eventDeadline;
+    /**
+     *标题
+     */
+    private String title;
+    private String path;
 
+    public String getStartingTime() {
+        return startingTime;
+    }
+
+    public void setStartingTime(String startingTime) {
+        this.startingTime = startingTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getEventDeadline() {
+        return eventDeadline;
+    }
+
+    public void setEventDeadline(String eventDeadline) {
+        this.eventDeadline = eventDeadline;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public Integer getActivityId() {
         return activityId;
@@ -71,21 +121,7 @@ public class Activity extends Model<Activity> {
         this.activityId = activityId;
     }
 
-    public Date getStartingTime() {
-        return startingTime;
-    }
 
-    public void setStartingTime(Date startingTime) {
-        this.startingTime = startingTime;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
 
     public String getType() {
         return type;

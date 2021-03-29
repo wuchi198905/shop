@@ -47,7 +47,7 @@
     </sql>
 <!--    查询会员头像年龄-->
     <select id="HomepageDisplayPagination" resultType="com.example.shop.management.bean.DTO.MemberInfoDTO" parameterType="com.example.shop.management.bean.DTO.MemberInfoDTO">
-        SELECT a.member_age,a.province,a.city,b.path from member_info  a LEFT JOIN  image b on a.member_id=b.member_id  and b.type='A'
+        SELECT a.member_id,a.member_height,a.member_age,a.province,a.city,b.path from member_info  a LEFT JOIN  image b on a.member_id=b.member_id  and b.type='A'
         <where>
             1=1
             <if test="maxAge!=null">

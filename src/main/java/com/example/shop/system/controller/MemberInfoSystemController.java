@@ -60,7 +60,7 @@ public class MemberInfoSystemController {
 
 
             memberInfo=memberInfoService.selectById(memberInfo);
-            memberInfo.setPassword(null);
+            memberInfo.setPassword("");
          return  Result.Result(RC.SUCCESS,memberInfo);
     }
 
