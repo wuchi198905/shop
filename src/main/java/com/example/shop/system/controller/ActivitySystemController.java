@@ -11,7 +11,7 @@ import com.example.shop.management.bean.MemberInfo;
 import com.example.shop.pub.bean.AttachFile;
 import com.example.shop.pub.service.ActivityService;
 import com.example.shop.pub.service.AttachFileService;
-import com.github.pagehelper.PageInfo;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

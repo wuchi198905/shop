@@ -1,13 +1,15 @@
 package com.example.shop.system.controller;
 
-import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+
 import com.example.shop.base.json.RC;
 import com.example.shop.base.json.Result;
-import com.example.shop.management.bean.DTO.ImageDTO;
+
 import com.example.shop.management.bean.MemberInfo;
-import com.example.shop.pub.service.ImageService;
+
 import com.example.shop.pub.service.MemberInfoService;
-import com.github.pagehelper.PageInfo;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -43,10 +45,12 @@ public class MemberInfoSystemController {
     @RequestMapping(path = "/memberInfoPagination", method = {RequestMethod.POST})
     public String MenuPagination(MemberInfo memberInfo, @RequestParam(name = "pageNum")String pageNum) {
 
-        PageHelper.startPage(Integer.valueOf(pageNum),10);
-        List<MemberInfo> users=memberInfoService.MenuPagination(memberInfo);
-        PageInfo<MemberInfo> pageInfo = new PageInfo<MemberInfo>(users);
-        return  Result.Result(RC.SUCCESS,pageInfo);
+//        PageHelper.startPage(Integer.valueOf(pageNum),10);
+//        List<MemberInfo> users=memberInfoService.MenuPagination(memberInfo);
+//        PageInfo<MemberInfo> pageInfo = new PageInfo<MemberInfo>(users);
+        Page<MemberInfo> page=new Page<>(Integer.valueOf(pageNum),10);
+        Page page1=memberInfoService.selectMapsPage(page,new EntityWrapper<MemberInfo>().eq("sts","0"));
+        return  Result.Result(RC.SUCCESS,page1);
     }
 
     @ApiOperation(value = "会员详细信息", notes = "会员详细信息")

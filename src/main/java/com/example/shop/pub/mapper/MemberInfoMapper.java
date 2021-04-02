@@ -1,9 +1,11 @@
 package com.example.shop.pub.mapper;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.example.shop.management.bean.DTO.MemberInfoDTO;
 import com.example.shop.management.bean.MemberInfo;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,4 +29,6 @@ public interface MemberInfoMapper extends BaseMapper<MemberInfo> {
     List<MemberInfoDTO> Latestregisteredmembers();
 
     List<MemberInfo> getmemberInfopage(MemberInfo memberInfo);
+
+    List<MemberInfoDTO> selectUserListPage(Page<MemberInfoDTO> page);
 }

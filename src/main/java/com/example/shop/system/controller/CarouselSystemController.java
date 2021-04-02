@@ -16,7 +16,7 @@ import com.example.shop.pub.bean.AttachFile;
 import com.example.shop.pub.service.AttachFileService;
 import com.example.shop.pub.service.CarouselService;
 import com.example.shop.system.bean.UserInfo;
-import com.github.pagehelper.PageInfo;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

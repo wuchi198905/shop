@@ -1,5 +1,6 @@
 package com.example.shop.pub.service.impl;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.example.shop.management.bean.Image;
 import com.example.shop.pub.mapper.ImageMapper;
 import com.example.shop.pub.service.ImageService;
@@ -26,4 +27,5 @@ public class ImageServiceImpl extends ServiceImpl<ImageMapper, Image> implements
     public List<ImageDTO> imagePagination(ImageDTO images) {
         return imageMapper.imagePagination(images);
     }
+
 }

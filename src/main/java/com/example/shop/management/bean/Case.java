@@ -18,7 +18,7 @@ import java.io.Serializable;
  * @author 陈志浩123
  * @since 2020-12-16
  */
-@TableName("case")
+@TableName("caseinfo")
 public class Case extends Model<Case> {
 
     private static final long serialVersionUID = 1L;
@@ -35,7 +35,15 @@ public class Case extends Model<Case> {
     private String content;
     @TableField("creation_time")
     private Date creationTime;
+    private String path;
 
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 
     public Integer getCaseId() {
         return caseId;

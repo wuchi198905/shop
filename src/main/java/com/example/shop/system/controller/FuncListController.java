@@ -1,17 +1,20 @@
 package com.example.shop.system.controller;
 
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
 import com.example.shop.base.json.ApiUtil;
 import com.example.shop.base.json.RC;
 import com.example.shop.base.json.Result;
 import com.example.shop.management.bean.DTO.FuncListDTO;
 import com.example.shop.management.bean.LoginUser;
+import com.example.shop.management.bean.MemberInfo;
 import com.example.shop.system.bean.FuncList;
 import com.example.shop.system.bean.UserInfo;
 import com.example.shop.system.service.FuncListService;
 import com.example.shop.system.service.UserInfoService;
-import com.github.pagehelper.PageInfo;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -47,10 +50,13 @@ public class FuncListController {
     @RequestMapping(path = "/MenuPagination", method = {RequestMethod.POST})
     public String MenuPagination(FuncList funcList,@PathVariable("pageNum") String pageNum) {
 
-        PageHelper.startPage(Integer.valueOf(pageNum),10);
-        List<FuncListDTO> users=funcListService.MenuPagination(funcList);
-        PageInfo<FuncListDTO> pageInfo = new PageInfo<FuncListDTO>(users);
-        return pageInfo.toString();
+//        PageHelper.startPage(Integer.valueOf(pageNum),10);
+//        List<FuncListDTO> users=funcListService.MenuPagination(funcList);
+//        PageInfo<FuncListDTO> pageInfo = new PageInfo<FuncListDTO>(users);
+        Page<MemberInfo> page=new Page<>(Integer.valueOf(pageNum),10);
+        Page page1=funcListService.selectMapsPage(page,new EntityWrapper<FuncList>().eq("sts","0"));
+        return  Result.Result(RC.SUCCESS,page1);
+
     }
     @ApiOperation(value = "新增菜单", notes = "新增菜单")
     @ApiImplicitParams({

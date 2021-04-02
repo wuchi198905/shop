@@ -10,7 +10,7 @@ import com.example.shop.base.json.Result;
 import com.example.shop.management.bean.*;
 import com.example.shop.pub.bean.AttachFile;
 import com.example.shop.pub.service.EnrollmentStaffService;
-import com.github.pagehelper.PageInfo;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -72,11 +74,12 @@ public class EnrollmentStaffController {
     })
     @RequestMapping(path = "/MyenrollmentStaffpage", method = {RequestMethod.POST})
     public String MyenrollmentStaffpage(EnrollmentStaff enrollmentStaff,Integer  pageNum,Integer connt) throws Exception {
-        PageHelper.startPage(pageNum,connt);
-        List<Activity> users=enrollmentStaffService.MyenrollmentStaffpage(enrollmentStaff);
-        PageInfo<Activity> pageInfo = new PageInfo<Activity>(users);
-        // 转存文件到指定的路径
-        return Result.Result(RC.SUCCESS);
+        Page<Activity> page=new Page<>(pageNum,connt);
+        Page page1=enrollmentStaffService.selectMapsPage(page,new EntityWrapper<EnrollmentStaff>().eq("sts","0"));
+//        List<Activity> users=enrollmentStaffService.MyenrollmentStaffpage(enrollmentStaff);
+//        PageInfo<Activity> pageInfo = new PageInfo<Activity>(users);
+//        // 转存文件到指定的路径
+        return Result.Result(RC.SUCCESS,page1);
 
 
     }
@@ -93,6 +96,26 @@ public class EnrollmentStaffController {
 
         // 转存文件到指定的路径
         return Result.Result(RC.SUCCESS);
+    }
+    @ApiOperation(value = "是否参与报名活动", notes = "是否参与报名活动", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true),
+            @ApiImplicitParam(name = "personnelId", value = "主键", paramType = "query", required = true, dataType = "int" ),
+
+    })
+    @RequestMapping(path = "/ISNOTenrollmentStaff", method = {RequestMethod.POST})
+    public String ISNOTenrollmentStaff(EnrollmentStaff enrollmentStaff) {
+        Map<String,Object>map=new HashMap<>();
+        String memberId = SessionVehicle.get(SessionVehicle.MEMBER_ID);
+
+        enrollmentStaff=enrollmentStaffService.selectById(enrollmentStaff);
+        if(enrollmentStaff.getMemberId().equals(memberId)){
+            /**已经参与活动*/
+            return Result.Result(RC.SUCCESS,"0");
+        }
+
+        return Result.Result(RC.SUCCESS,"1");
+
     }
 }
 

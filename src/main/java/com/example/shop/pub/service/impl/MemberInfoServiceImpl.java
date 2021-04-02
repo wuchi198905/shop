@@ -1,6 +1,7 @@
 package com.example.shop.pub.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.example.shop.base.json.ApiUtil;
 import com.example.shop.base.json.RC;
 import com.example.shop.base.json.Result;
@@ -149,5 +150,10 @@ public class MemberInfoServiceImpl extends ServiceImpl<MemberInfoMapper, MemberI
                 return Result.Result(RC.REGIST_PARAM_SMSCODE_INVALID);
             }
         }
+    }
+
+    @Override
+    public List<MemberInfoDTO> selectUserListPage(Page<MemberInfoDTO> page) {
+        return baseMapper.selectUserListPage(page);
     }
 }

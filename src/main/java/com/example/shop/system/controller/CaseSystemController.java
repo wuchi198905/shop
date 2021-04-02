@@ -99,10 +99,32 @@ public class CaseSystemController {
     })
     @RequestMapping(path = "/querctteenrollmentStaff", method = {RequestMethod.POST})
     public String querctteenrollmentStaff(Case cases,Integer  pageNum,Integer connt) throws Exception {
-        Page<Case> page=new Page<>(connt,pageNum);
-        Page page1=caseService.selectMapsPage(page,new EntityWrapper<Case>().eq("title",cases.getTitle()));
+        Page<Case> page=new Page<>(pageNum,connt);
+        if(cases.getTitle()==null){
+            Page page1=caseService.selectMapsPage(page,new EntityWrapper<Case>());
+            return Result.Result(RC.SUCCESS,page1);
+        }else{
+            Page page1=caseService.selectMapsPage(page,new EntityWrapper<Case>().eq("title",cases.getTitle()));
+            return Result.Result(RC.SUCCESS,page1);
+        }
+
         // 转存文件到指定的路径
-        return Result.Result(RC.SUCCESS,page1);
+
+
+
+    }
+    @ApiOperation(value = "幸福案例详情", notes = "幸福案例详情", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true),
+
+            @ApiImplicitParam(name = "caseId", value = "主键", paramType = "query", required = true, dataType = "string" ),
+    })
+    @RequestMapping(path = "/ctteenrollmentStaffInfo", method = {RequestMethod.POST})
+    public String ctteenrollmentStaffInfo(Case cases) throws Exception {
+
+        cases=caseService.selectById(cases);
+        // 转存文件到指定的路径
+        return Result.Result(RC.SUCCESS,cases);
 
 
     }

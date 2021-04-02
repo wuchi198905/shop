@@ -1,5 +1,6 @@
 package com.example.shop.pub.service;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.example.shop.management.bean.DTO.MemberInfoDTO;
 import com.example.shop.management.bean.LoginUser;
 import com.example.shop.management.bean.MemberInfo;
@@ -32,4 +33,6 @@ public interface MemberInfoService extends IService<MemberInfo> {
     List<MemberInfo> MenuPagination(MemberInfo memberInfo);
 
     String coderegistered(String account, String code);
+
+    List<MemberInfoDTO> selectUserListPage(Page<MemberInfoDTO> page);
 }

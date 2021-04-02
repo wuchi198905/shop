@@ -1,5 +1,6 @@
 package com.example.shop.pub.mapper;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.example.shop.management.bean.Image;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.example.shop.management.bean.DTO.ImageDTO;
@@ -20,4 +21,6 @@ import java.util.List;
 public interface ImageMapper extends BaseMapper<Image> {
 
     List<ImageDTO> imagePagination(ImageDTO images);
+
+
 }

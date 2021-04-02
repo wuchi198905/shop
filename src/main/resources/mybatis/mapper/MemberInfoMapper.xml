@@ -73,8 +73,8 @@
         </where>
     </select>
 <!--    最新注册会员 -->
-    <select id="Latestregisteredmembers" resultType="com.example.shop.management.bean.MemberInfo" parameterType="com.example.shop.management.bean.MemberInfo">
-        SELECT a.member_age,a.province,a.city,A.member_name  from member_info  a    where 1=1   ORDER BY registration_time  LIMIT 0,10
+    <select id="Latestregisteredmembers" resultType="com.example.shop.management.bean.DTO.MemberInfoDTO" parameterType="com.example.shop.management.bean.DTO.MemberInfoDTO">
+        SELECT a.member_age,a.province,a.city,A.member_name,a.member_height,b.path  from member_info  a LEFT JOIN  image b on a.member_id=b.member_id  and b.type='A'   where 1=1   ORDER BY a.registration_time  LIMIT 0,10
 
     </select>
     <!--    查询会员列表 -->
@@ -100,5 +100,12 @@
 
         </where>
         ORDER BY registration_time
+    </select>
+
+
+
+    <select id="selectUserListPage" resultType="com.example.shop.management.bean.DTO.MemberInfoDTO" parameterType="com.example.shop.management.bean.DTO.MemberInfoDTO">
+        SELECT a.member_age,a.province,a.city,A.member_name,a.member_height,b.path  from member_info  a LEFT JOIN  image b on a.member_id=b.member_id  and b.type='A'   where 1=1   ORDER BY a.registration_time
+
     </select>
 </mapper>

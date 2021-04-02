@@ -8,6 +8,7 @@
         <result column="title" property="title" />
         <result column="content" property="content" />
         <result column="creation_time" property="creationTime" />
+        <result column="path" property="path" />
     </resultMap>
 
     <!-- 通用查询结果列 -->

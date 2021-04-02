@@ -3,10 +3,12 @@ package com.example.shop.management.controller;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.example.shop.base.SessionVehicle;
 import com.example.shop.base.json.ApiUtil;
 import com.example.shop.base.json.RC;
 import com.example.shop.base.json.Result;
+import com.example.shop.management.bean.Case;
 import com.example.shop.management.bean.DTO.MemberInfoDTO;
 import com.example.shop.management.bean.Image;
 import com.example.shop.management.bean.LoginUser;
@@ -441,6 +443,26 @@ public class MemberInfoController {
     public String loginOut(String userName) {
 
         return Result.Result(RC.SUCCESS);
+    }
+
+    /**
+     * 最新注册会员
+     */
+    @ApiOperation(value = "注册会员分页列表", notes = "注册会员分页列表")
+    @ApiImplicitParams({
+//            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true)
+            @ApiImplicitParam(name = "pageNum", value = "当前多少页", paramType = "query", required = true, dataType = "int" ),
+            @ApiImplicitParam(name = "connt", value = "当前页数量", paramType = "query", required = true, dataType = "int" ),
+    })
+    @RequestMapping(value = "Latestregisteredmemberspages", method = RequestMethod.POST)
+    @ResponseBody
+    public String Latestregisteredmemberspages(MemberInfoDTO memberInfoDTO, Integer  pageNum, Integer connt) {
+
+        Page<MemberInfoDTO> page = new Page<>(pageNum, connt);
+        page.setRecords(memberInfoService.selectUserListPage(page));
+        System.out.println(page);
+
+        return Result.Result(RC.SUCCESS, page);
     }
 }
 

@@ -45,11 +45,45 @@ public class ActivityController {
     @RequestMapping(path = "/querdImagePage", method = {RequestMethod.POST})
     public String querdImagePage(int connt,int pageNum,String type) {
         try {
-            Page<Activity> page=new Page<>(connt,pageNum);
-            Page page1=activityService.selectMapsPage(page,new EntityWrapper<Activity>().eq("type",type).eq("sts","0"));
+            Page<Activity> page=new Page<>(pageNum,connt);
+            if(type==null){
+                Page page1=activityService.selectMapsPage(page,new EntityWrapper<Activity>().eq("sts","0"));
+                System.out.println(page1);
+                return Result.Result(RC.SUCCESS, page1);
+            }else{
+                Page page1=activityService.selectMapsPage(page,new EntityWrapper<Activity>().eq("type",type).eq("sts","0"));
+                System.out.println(page1);
+                return Result.Result(RC.SUCCESS, page1);
+            }
 
 
+
+
+        } catch (Exception e) {
+            return Result.Result(RC.system_erry);
+        }
+    }
+    @ApiOperation(value = "活动详情", notes = "活动详情")
+    @ApiImplicitParams({
+
+            @ApiImplicitParam(name = "token", value = "token", paramType = "query", required = true, dataType = "string"),
+            @ApiImplicitParam(name = "activityId", value = "主键", paramType = "query", required = true, dataType = "string" ),
+
+
+    })
+    @ResponseBody
+    @RequestMapping(path = "/querdImageOne", method = {RequestMethod.POST})
+    public String querdImageOne(Activity activity) {
+        try {
+
+
+            Activity page1=activityService.selectById(activity);
             return Result.Result(RC.SUCCESS, page1);
+
+
+
+
+
         } catch (Exception e) {
             return Result.Result(RC.system_erry);
         }
