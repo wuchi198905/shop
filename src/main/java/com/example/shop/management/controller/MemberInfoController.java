@@ -459,10 +459,74 @@ public class MemberInfoController {
     public String Latestregisteredmemberspages(MemberInfoDTO memberInfoDTO, Integer  pageNum, Integer connt) {
 
         Page<MemberInfoDTO> page = new Page<>(pageNum, connt);
-        page.setRecords(memberInfoService.selectUserListPage(page));
+        page.setRecords(memberInfoService.selectUserListPage(page,memberInfoDTO));
         System.out.println(page);
 
         return Result.Result(RC.SUCCESS, page);
+    }
+
+
+
+
+
+    /**
+     * 会员详情
+     */
+    @ApiOperation(value = "会员详情", notes = "会员详情")
+    @ApiImplicitParams({
+//            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true)
+            @ApiImplicitParam(name = "memberId", value = "主键", paramType = "query", required = true, dataType = "int" ),
+
+    })
+    @RequestMapping(value = "querMemberInfo", method = RequestMethod.POST)
+    @ResponseBody
+    public String querMemberInfo(MemberInfoDTO memberInfoDTO) {
+
+
+        memberInfoDTO=memberInfoService.selectUserInfo(memberInfoDTO);
+
+
+        return Result.Result(RC.SUCCESS, memberInfoDTO);
+    }
+
+    /**
+     * 个人信息
+     */
+    @ApiOperation(value = "个人信息", notes = "个人信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true)
+
+
+    })
+    @RequestMapping(value = "myMemberInfo", method = RequestMethod.POST)
+    @ResponseBody
+    public String myMemberInfo(MemberInfoDTO memberInfoDTO ) {
+        String memberId = SessionVehicle.get(SessionVehicle.MEMBER_ID);
+        memberInfoDTO.setMemberId(Integer.valueOf(memberId));
+         memberInfoDTO=memberInfoService.selectUserInfo(memberInfoDTO);
+
+
+        return Result.Result(RC.SUCCESS, memberInfoDTO);
+    }
+
+    /**
+     * 个人信息
+     */
+    @ApiOperation(value = "个人中心完善幸喜", notes = "完善幸喜")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true)
+
+
+    })
+    @RequestMapping(value = "upDateMemberInfo", method = RequestMethod.POST)
+    @ResponseBody
+    public String upMemberInfo(MemberInfoDTO memberInfoDTO ) {
+        String memberId = SessionVehicle.get(SessionVehicle.MEMBER_ID);
+        memberInfoDTO.setMemberId(Integer.valueOf(memberId));
+        memberInfoService.updateById(memberInfoDTO);
+
+
+        return Result.Result(RC.SUCCESS, memberInfoDTO);
     }
 }
 

@@ -20,6 +20,7 @@ public enum RC {
     PERFCT_CITY_ISNOTNULL("110008", "所在市不能为空"),
     PERFCT_IDNUMBER_ISNOTNULL("110009", "身份证格式不正确"),
     FILE_TYPE_Ereey("200001", "图片格式不正确"),
+    marriage_time("900001", "有效时间不能小于当前时间"),
     /**
      * 登录
      */

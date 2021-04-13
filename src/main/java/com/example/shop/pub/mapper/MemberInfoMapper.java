@@ -5,6 +5,7 @@ import com.example.shop.management.bean.DTO.MemberInfoDTO;
 import com.example.shop.management.bean.MemberInfo;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
@@ -30,5 +31,7 @@ public interface MemberInfoMapper extends BaseMapper<MemberInfo> {
 
     List<MemberInfo> getmemberInfopage(MemberInfo memberInfo);
 
-    List<MemberInfoDTO> selectUserListPage(Page<MemberInfoDTO> page);
+    List<MemberInfoDTO> selectUserListPage(@Param("page") Page<MemberInfoDTO> page,@Param("memberInfoDTO")MemberInfoDTO memberInfoDTO);
+
+    MemberInfoDTO selectUserInfo(MemberInfoDTO memberInfoDTO);
 }

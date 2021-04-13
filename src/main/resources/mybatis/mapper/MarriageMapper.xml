@@ -15,6 +15,7 @@
         <result column="remarks" property="remarks" />
         <result column="creation_time" property="creationTime" />
         <result column="update_time" property="updateTime" />
+        <result column="effective_time" property="effectiveTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->

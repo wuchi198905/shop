@@ -7,8 +7,10 @@ import com.example.shop.base.SessionVehicle;
 import com.example.shop.base.json.RC;
 import com.example.shop.base.json.Result;
 import com.example.shop.management.bean.Carousel;
+import com.example.shop.management.bean.Image;
 import com.example.shop.management.bean.Marriage;
 import com.example.shop.management.bean.MemberInfo;
+import com.example.shop.pub.service.ImageService;
 import com.example.shop.pub.service.MarriageService;
 import com.example.shop.pub.service.MemberInfoService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -21,7 +23,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * <p>
@@ -38,6 +43,8 @@ public class MarriageController {
     private MarriageService advisoryService;
     @Autowired
     private MemberInfoService memberInfoService;
+    @Autowired
+    private ImageService imageService;
 
     @ApiOperation(value = "添加征婚", notes = "添加征婚", httpMethod = "POST")
     @ApiImplicitParams({
@@ -48,11 +55,16 @@ public class MarriageController {
             @ApiImplicitParam(name = "area", value = "地区", paramType = "query", required = true, dataType = "string" ),
             @ApiImplicitParam(name = "weight", value = "体重", paramType = "query", required = true, dataType = "string" ),
             @ApiImplicitParam(name = "remarks", value = "描述", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "remarks", value = "描述", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "effectiveTime", value = "有效时间 ", paramType = "query", required = true, dataType = "string" ),
     })
     @ResponseBody
     @RequestMapping(path = "/addArouselpage", method = {RequestMethod.POST})
-    public String addArouselpage(Marriage carousel) {
+    public String addArouselpage(Marriage carousel) throws ParseException {
+
         String memberId = SessionVehicle.get(SessionVehicle.MEMBER_ID);
+        Image image = imageService.selectOne(new EntityWrapper<Image>().eq("member_id", memberId).eq("type", "A"));
+        carousel.setPath(image.getPath());
         carousel.setStatus("0");
         carousel.setMemberId(Integer.valueOf(memberId));
         MemberInfo memberInfo=new MemberInfo();
@@ -62,6 +74,19 @@ public class MarriageController {
         carousel.setAges(memberInfo.getMemberAge().toString());
         carousel.setArea(memberInfo.getArea());
         carousel.setCreationTime(new Date());
+
+        boolean flag = false;
+        Date nowDate = new Date();
+        Date pastDate = null;
+        //格式化日期
+        SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
+        sdf.applyPattern("yyyy-MM-dd");
+        pastDate = sdf.parse(carousel.getEffectiveTime());
+        //调用Date里面的before方法来做判断
+        flag = pastDate.before(nowDate);
+        if (flag) {
+            return Result.Result(RC.marriage_time);
+        }
         advisoryService.insert(carousel);
 
         return Result.Result(RC.SUCCESS);

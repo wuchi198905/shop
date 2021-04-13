@@ -34,5 +34,7 @@ public interface MemberInfoService extends IService<MemberInfo> {
 
     String coderegistered(String account, String code);
 
-    List<MemberInfoDTO> selectUserListPage(Page<MemberInfoDTO> page);
+    List<MemberInfoDTO> selectUserListPage(Page<MemberInfoDTO> page,MemberInfoDTO memberInfoDT);
+
+    MemberInfoDTO selectUserInfo(MemberInfoDTO memberInfoDTO);
 }

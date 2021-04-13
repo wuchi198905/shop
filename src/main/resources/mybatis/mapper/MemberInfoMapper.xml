@@ -69,12 +69,12 @@
             <if test="status!=null and status!='' ">
                 and b.status =#{status}
             </if>
-            LIMIT 0,5
+            LIMIT 0,12
         </where>
     </select>
 <!--    最新注册会员 -->
     <select id="Latestregisteredmembers" resultType="com.example.shop.management.bean.DTO.MemberInfoDTO" parameterType="com.example.shop.management.bean.DTO.MemberInfoDTO">
-        SELECT a.member_age,a.province,a.city,A.member_name,a.member_height,b.path  from member_info  a LEFT JOIN  image b on a.member_id=b.member_id  and b.type='A'   where 1=1   ORDER BY a.registration_time  LIMIT 0,10
+        SELECT a.member_id ,a.member_age,a.province,a.city,A.member_name,a.member_height,b.path  from member_info  a LEFT JOIN  image b on a.member_id=b.member_id  and b.type='A'   where 1=1   ORDER BY a.registration_time  LIMIT 0,10
 
     </select>
     <!--    查询会员列表 -->
@@ -104,8 +104,25 @@
 
 
 
-    <select id="selectUserListPage" resultType="com.example.shop.management.bean.DTO.MemberInfoDTO" parameterType="com.example.shop.management.bean.DTO.MemberInfoDTO">
-        SELECT a.member_age,a.province,a.city,A.member_name,a.member_height,b.path  from member_info  a LEFT JOIN  image b on a.member_id=b.member_id  and b.type='A'   where 1=1   ORDER BY a.registration_time
+    <select id="selectUserListPage" resultType="com.example.shop.management.bean.DTO.MemberInfoDTO" >
+        SELECT a.member_id,a.member_age,a.province,a.city,A.member_name,a.member_height,b.path  from member_info  a LEFT JOIN  image b on a.member_id=b.member_id  and b.type='A'   where 1=1
+        <if test="memberInfoDTO.province!=null and memberInfoDTO.province!='' ">
+            and province=#{memberInfoDTO.province}
+        </if>
+        <if test="memberInfoDTO.city!=null and memberInfoDTO.city!='' ">
+            and city =#{memberInfoDTO.city}
+        </if>
+        <if test="memberInfoDTO.memberGender!=null and memberInfoDTO.memberGender!='' ">
+            and member_gender =#{memberInfoDTO.memberGender}
+        </if>
+
+        ORDER BY a.registration_time
+
+    </select>
+
+    <select id="selectUserInfo" resultType="com.example.shop.management.bean.DTO.MemberInfoDTO">
+        SELECT         a.member_id ,user_name as userName,member_name AS memberName, member_gender AS memberGender, member_age AS memberAge, member_education AS memberEducation, member_weight AS memberWeight, member_height AS memberHeight, marital_status AS maritalStatus, WeChat_authentication_status AS wechatAuthenticationStatus, real_name_authentication_status AS realNameAuthenticationStatus, membership_level AS membershipLevel, openid, contact_number AS contactNumber, mailbox, province, city, area, address, id_number AS idNumber, account, we_chat_number AS weChatNumber, birthday, current_city AS currentCity, current_economy AS currentEconomy, current_dimension AS currentDimension, online, whether_upload_pictures AS whetherUploadPictures, member_source AS memberSource, constellation
+                                            ,b.path  from member_info  a LEFT JOIN  image b on a.member_id=b.member_id  and b.type='A'   where 1=1 and a.member_id=#{memberId}
 
     </select>
 </mapper>

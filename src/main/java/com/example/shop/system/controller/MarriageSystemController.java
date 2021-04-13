@@ -42,14 +42,17 @@ public class MarriageSystemController {
             @ApiImplicitParam(name = "area", value = "地区", paramType = "query", required = true, dataType = "string" ),
             @ApiImplicitParam(name = "weight", value = "体重", paramType = "query", required = true, dataType = "string" ),
             @ApiImplicitParam(name = "remarks", value = "描述", paramType = "query", required = true, dataType = "string" ),
-            @ApiImplicitParam(name = "status", value = "0 待审核 1已审核 3已失效 ", paramType = "query", required = true, dataType = "string" ),
+            @ApiImplicitParam(name = "effectiveTime", value = "有效时间 ", paramType = "query", required = true, dataType = "string" ),
     })
     @ResponseBody
     @RequestMapping(path = "/getecarouselpage", method = {RequestMethod.POST})
     public String getecarouselpage(Marriage carousel, Integer  pageNum, Integer connt) {
 
         Page<Carousel> page=new Page<>(pageNum,connt);
-        Page page1=advisoryService.selectMapsPage(page,new EntityWrapper<Marriage>().like("title",carousel.getTitle()).eq("status","2"));
+        if(carousel.getTitle()==null){
+            Page page1=advisoryService.selectMapsPage(page,new EntityWrapper<Marriage>());
+        }
+        Page page1=advisoryService.selectMapsPage(page,new EntityWrapper<Marriage>().like("title",carousel.getTitle()));
 
         return Result.Result(RC.SUCCESS,page1);
     }

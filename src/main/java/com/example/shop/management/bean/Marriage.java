@@ -56,7 +56,29 @@ public class Marriage extends Model<Marriage> {
     private Date creationTime;
     @TableField("update_time")
     private Date updateTime;
+    @TableField("effective_time")
+    /**
+     * 有效时间
+     */
+    private String  effectiveTime;
 
+    private String  path;
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getEffectiveTime() {
+        return effectiveTime;
+    }
+
+    public void setEffectiveTime(String effectiveTime) {
+        this.effectiveTime = effectiveTime;
+    }
 
     public Integer getMarriageId() {
         return marriageId;

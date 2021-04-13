@@ -9,6 +9,7 @@ import com.example.shop.base.util.JwtUtil;
 import com.example.shop.management.bean.DTO.MemberInfoDTO;
 import com.example.shop.management.bean.LoginUser;
 import com.example.shop.management.bean.MemberInfo;
+import com.example.shop.pub.Utils.AES;
 import com.example.shop.pub.mapper.MemberInfoMapper;
 import com.example.shop.pub.service.IMailService;
 import com.example.shop.pub.service.MemberInfoService;
@@ -49,6 +50,7 @@ public class MemberInfoServiceImpl extends ServiceImpl<MemberInfoMapper, MemberI
         }else{
             if(code.equals(code)){
                 MemberInfo memberInfo=new MemberInfo();
+                //                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                password = AES.decrypt(password);
                 memberInfo.setPassword(password);
                 memberInfo.setAccount(account);
                 memberInfo.setRegistrationTime(new Date());
@@ -153,7 +155,12 @@ public class MemberInfoServiceImpl extends ServiceImpl<MemberInfoMapper, MemberI
     }
 
     @Override
-    public List<MemberInfoDTO> selectUserListPage(Page<MemberInfoDTO> page) {
-        return baseMapper.selectUserListPage(page);
+    public List<MemberInfoDTO> selectUserListPage(Page<MemberInfoDTO> page,MemberInfoDTO memberInfoDTO) {
+        return baseMapper.selectUserListPage(page,memberInfoDTO);
+    }
+
+    @Override
+    public MemberInfoDTO selectUserInfo(MemberInfoDTO memberInfoDTO) {
+        return baseMapper.selectUserInfo(memberInfoDTO);
     }
 }

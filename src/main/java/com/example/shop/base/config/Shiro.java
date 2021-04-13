@@ -69,8 +69,8 @@ public class Shiro {
         filterChainDefinitionMap.put("/memberInfo/qeeruserName/**", "anon");
         filterChainDefinitionMap.put("/memberInfo/case/**", "anon");
         filterChainDefinitionMap.put("/memberInfo/Latestregisteredmemberspages/**", "anon");
-
-
+        filterChainDefinitionMap.put("/memberInfo/marriage/getecarouselpage/**", "anon");
+        filterChainDefinitionMap.put("/memberInfo/querMemberInfo/**", "anon");
         // 添加自己的过滤器并且取名为jwt
         Map<String, Filter> filterMap = new HashMap<String, Filter>(1);
         filterMap.put("jwt", new JwtFilter());
