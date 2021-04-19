@@ -5,6 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.shop.management.bean.MemberInfo">
         <id column="member_id" property="memberId" />
+        <result column="user_name" property="userName" />
         <result column="member_name" property="memberName" />
         <result column="member_gender" property="memberGender" />
         <result column="member_age" property="memberAge" />
@@ -31,20 +32,30 @@
         <result column="current_economy" property="currentEconomy" />
         <result column="current_dimension" property="currentDimension" />
         <result column="online" property="online" />
-        <result column="whether_upload_pictures" property="whetherUploadPictures" />
         <result column="member_source" property="memberSource" />
+        <result column="whether_upload_pictures" property="whetherUploadPictures" />
         <result column="constellation" property="constellation" />
         <result column="account_status" property="accountStatus" />
         <result column="last_login_time" property="lastLoginTime" />
         <result column="registration_time" property="registrationTime" />
-        <result column="user_name" property="userName" />
         <result column="sts" property="sts" />
+        <result column="religious_beliefs" property="religiousBeliefs" />
+        <result column="smoking" property="smoking" />
+        <result column="nature_companature" property="natureCompanature" />
+        <result column="drinking" property="drinking" />
+        <result column="ranking" property="ranking" />
+        <result column="long_distance_relationships" property="longDistanceRelationships" />
+        <result column="child" property="child" />
+        <result column="live_with" property="liveWith" />
+        <result column="personal_introduction" property="personalIntroduction" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        member_id AS memberId,user_name as userName,member_name AS memberName, member_gender AS memberGender, member_age AS memberAge, member_education AS memberEducation, member_weight AS memberWeight, member_height AS memberHeight, marital_status AS maritalStatus, WeChat_authentication_status AS wechatAuthenticationStatus, real_name_authentication_status AS realNameAuthenticationStatus, membership_level AS membershipLevel, openid, contact_number AS contactNumber, mailbox, province, city, area, address, password, id_number AS idNumber, account, we_chat_number AS weChatNumber, birthday, current_city AS currentCity, current_economy AS currentEconomy, current_dimension AS currentDimension, online, whether_upload_pictures AS whetherUploadPictures, member_source AS memberSource, constellation, account_status AS accountStatus, last_login_time AS lastLoginTime, registration_time AS registrationTime, sts
+        member_id AS memberId, user_name AS userName, member_name AS memberName, member_gender AS memberGender, member_age AS memberAge, member_education AS memberEducation, member_weight AS memberWeight, member_height AS memberHeight, marital_status AS maritalStatus, WeChat_authentication_status AS wechatAuthenticationStatus, real_name_authentication_status AS realNameAuthenticationStatus, membership_level AS membershipLevel, openid, contact_number AS contactNumber, mailbox, province, city, area, address, password, id_number AS idNumber, account, we_chat_number AS weChatNumber, birthday, current_city AS currentCity, current_economy AS currentEconomy, current_dimension AS currentDimension, online, member_source AS memberSource, whether_upload_pictures AS whetherUploadPictures, constellation, account_status AS accountStatus, last_login_time AS lastLoginTime, registration_time AS registrationTime, sts, religious_beliefs AS religiousBeliefs, smoking, nature_companature AS natureCompanature, drinking, ranking, long_distance_relationships AS longDistanceRelationships, child, live_with AS liveWith, personal_introduction AS personalIntroduction
     </sql>
+
+
 <!--    查询会员头像年龄-->
     <select id="HomepageDisplayPagination" resultType="com.example.shop.management.bean.DTO.MemberInfoDTO" parameterType="com.example.shop.management.bean.DTO.MemberInfoDTO">
         SELECT a.member_id,a.member_height,a.member_age,a.province,a.city,b.path from member_info  a LEFT JOIN  image b on a.member_id=b.member_id  and b.type='A'
@@ -121,7 +132,7 @@
     </select>
 
     <select id="selectUserInfo" resultType="com.example.shop.management.bean.DTO.MemberInfoDTO">
-        SELECT         a.member_id ,user_name as userName,member_name AS memberName, member_gender AS memberGender, member_age AS memberAge, member_education AS memberEducation, member_weight AS memberWeight, member_height AS memberHeight, marital_status AS maritalStatus, WeChat_authentication_status AS wechatAuthenticationStatus, real_name_authentication_status AS realNameAuthenticationStatus, membership_level AS membershipLevel, openid, contact_number AS contactNumber, mailbox, province, city, area, address, id_number AS idNumber, account, we_chat_number AS weChatNumber, birthday, current_city AS currentCity, current_economy AS currentEconomy, current_dimension AS currentDimension, online, whether_upload_pictures AS whetherUploadPictures, member_source AS memberSource, constellation
+        SELECT   religious_beliefs, smoking,nature_companature,drinking,ranking,long_distance_relationships,child,live_with, personal_introduction ,   a.member_id ,user_name as userName,member_name AS memberName, member_gender AS memberGender, member_age AS memberAge, member_education AS memberEducation, member_weight AS memberWeight, member_height AS memberHeight, marital_status AS maritalStatus, WeChat_authentication_status AS wechatAuthenticationStatus, real_name_authentication_status AS realNameAuthenticationStatus, membership_level AS membershipLevel, openid, contact_number AS contactNumber, mailbox, province, city, area, address, id_number AS idNumber, account, we_chat_number AS weChatNumber, birthday, current_city AS currentCity, current_economy AS currentEconomy, current_dimension AS currentDimension, online, whether_upload_pictures AS whetherUploadPictures, member_source AS memberSource, constellation
                                             ,b.path  from member_info  a LEFT JOIN  image b on a.member_id=b.member_id  and b.type='A'   where 1=1 and a.member_id=#{memberId}
 
     </select>

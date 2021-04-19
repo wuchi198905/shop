@@ -210,6 +210,23 @@ public class ImageController {
             return Result.Result("40001", "上传文件出错", e);
         }
     }
+    /**
+     * 删除图片
+     */
 
+    @ApiOperation(value = "删除图片", notes = "删除图片")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", dataType = "string", name = "Token", value = "token标记", required = true),
+            @ApiImplicitParam(name = "imageId", value = "图片id", paramType = "query", required = true, dataType = "string"),
+
+    })
+    @RequestMapping(value = "delectMyphotos", method = RequestMethod.POST)
+    @ResponseBody
+    public String Queryphotos(Image image) {
+
+        imageService.deleteById(image);
+
+        return Result.Result(RC.SUCCESS, image);
+    }
 
 }

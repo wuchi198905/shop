@@ -190,7 +190,47 @@ public class MemberInfo extends Model<MemberInfo> {
      * 0正常1删除
      */
     private Integer sts;
-
+    /**
+     * 宗教信仰
+     */
+    @TableField("religious_beliefs")
+    private String religiousBeliefs;
+    /**
+     * 是否吸烟
+     */
+    private String smoking;
+    /**
+     * 公司性质
+     */
+    @TableField("nature_companature")
+    private String natureCompanature;
+    /**
+     * 是否饮酒
+     */
+    private String drinking;
+    /**
+     * 排行
+     */
+    private String ranking;
+    /**
+     * 异地恋
+     */
+    @TableField("long_distance_relationships")
+    private String longDistanceRelationships;
+    /**
+     * 是否要小孩
+     */
+    private String child;
+    /**
+     * 是否愿意和父母同住
+     */
+    @TableField("live_with")
+    private String liveWith;
+    /**
+     * 个人介绍
+     */
+    @TableField("personal_introduction")
+    private String personalIntroduction;
 
 
 

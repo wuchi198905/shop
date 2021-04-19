@@ -1,6 +1,7 @@
 package com.example.shop.management.controller;
 
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 
 import com.baomidou.mybatisplus.plugins.Page;
@@ -198,7 +199,18 @@ public class MemberInfoController {
             @ApiImplicitParam(name = "weChatNumber", value = "微信号", paramType = "query", required = true, dataType = "string"),
             @ApiImplicitParam(name = "birthday", value = "生日", paramType = "query", required = true, dataType = "Date"),
             @ApiImplicitParam(name = "constellation", value = "星座", paramType = "query", required = true, dataType = "string"),
-            @ApiImplicitParam(name = "memberHeight", value = "身高", paramType = "query", required = true, dataType = "string")
+            @ApiImplicitParam(name = "memberHeight", value = "身高", paramType = "query", required = true, dataType = "string"),
+            @ApiImplicitParam(name = "religiousBeliefs", value = "宗教信仰", paramType = "query", required = true, dataType = "string"),
+            @ApiImplicitParam(name = "smoking", value = "是否吸烟", paramType = "query", required = true, dataType = "string"),
+            @ApiImplicitParam(name = "natureCompanature", value = "公司性质", paramType = "query", required = true, dataType = "string"),
+            @ApiImplicitParam(name = "drinking", value = "是否饮酒", paramType = "query", required = true, dataType = "string"),
+            @ApiImplicitParam(name = "ranking", value = "宗教信仰", paramType = "query", required = true, dataType = "string"),
+            @ApiImplicitParam(name = "longDistanceRelationships", value = "异地恋", paramType = "query", required = true, dataType = "string"),
+            @ApiImplicitParam(name = "religiousBeliefs", value = "宗教信仰", paramType = "query", required = true, dataType = "string"),
+            @ApiImplicitParam(name = "child", value = "是否要小孩", paramType = "query", required = true, dataType = "string"),
+            @ApiImplicitParam(name = "liveWith", value = "是否愿意和父母同住", paramType = "query", required = true, dataType = "string"),
+            @ApiImplicitParam(name = "personalIntroduction", value = "个人介绍", paramType = "query", required = true, dataType = "string"),
+
     })
 
     @RequestMapping(value = "/perfectInformation", method = RequestMethod.POST)
@@ -484,9 +496,12 @@ public class MemberInfoController {
 
 
         memberInfoDTO=memberInfoService.selectUserInfo(memberInfoDTO);
+        Map<String,Object>map=new HashMap<>();
+        map.put("memberInfo",memberInfoDTO);
+        List<Image> image = imageService.selectList(new EntityWrapper<Image>().eq("member_id", memberInfoDTO.getMemberId()));
+        map.put("image",image);
+        return Result.Result(RC.SUCCESS, map);
 
-
-        return Result.Result(RC.SUCCESS, memberInfoDTO);
     }
 
     /**
@@ -504,8 +519,10 @@ public class MemberInfoController {
         String memberId = SessionVehicle.get(SessionVehicle.MEMBER_ID);
         memberInfoDTO.setMemberId(Integer.valueOf(memberId));
          memberInfoDTO=memberInfoService.selectUserInfo(memberInfoDTO);
-
-
+//       Map<String,Object>map=new HashMap<>();
+//        map.put("memberInfo",memberInfoDTO);
+//        List<Image> image = imageService.selectList(new EntityWrapper<Image>().eq("member_id", memberId));
+//        map.put("image",memberInfoDTO);
         return Result.Result(RC.SUCCESS, memberInfoDTO);
     }
 
